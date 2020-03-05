@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.util.*;
- 
+
 public class Ponto extends Figura
 {
     protected int x,  y;
@@ -9,7 +9,7 @@ public class Ponto extends Figura
     {
         this (x, y, Color.BLACK);
     }
-	  
+
     public Ponto (int x, int y, Color cor)
     {
         super (cor);
@@ -36,22 +36,22 @@ public class Ponto extends Figura
     {
         this.x = x;
     }
-	  
+
     public void setY (int y)
     {
         this.y = y;
     }
-	  
+
     public int getX ()
     {
         return this.x;
     }
-	  
+
     public int getY ()
     {
     	return this.y;
     }
-	  
+
     public void torneSeVisivel (Graphics g)
     {
     	g.setColor (this.cor);

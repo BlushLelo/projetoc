@@ -1,17 +1,17 @@
 import java.awt.*;
 import java.util.*;
 
-public class Elipse extends Figura
+public class Retangulo extends Figura
 {
     protected Ponto p1, p2;
     protected boolean preenchido;
 
-    public Elipse (int x1, int y1, int x2, int y2, boolean preenchido)
+    public Retangulo (int x1, int y1, int x2, int y2, boolean preenchido)
     {
         this (x1, y1, x2, y2, Color.BLACK, preenchido);
     }
 
-    public Elipse (int x1, int y1, int x2, int y2, Color cor, boolean preenchido)
+    public Retangulo (int x1, int y1, int x2, int y2, Color cor, boolean preenchido)
     {
         super(cor);
 
@@ -20,7 +20,7 @@ public class Elipse extends Figura
         this.preenchido = preenchido;
     }
 
-    public Elipse (String s)
+    public Retangulo (String s)
     {
         StringTokenizer quebrador = new StringTokenizer(s,":");
 
@@ -63,9 +63,9 @@ public class Elipse extends Figura
 
     public void torneSeVisivel (Graphics g)
     {
-        g.setColor(this.cor);
         if(!preenchido) {
-            g.drawOval(
+            g.setColor(cor);
+            g.drawRect(
                     ((this.p1.getX() + this.p2.getX())/2) - Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
                     ((this.p1.getY() + this.p2.getY())/2) - Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY()),
                     2 * Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
@@ -74,13 +74,15 @@ public class Elipse extends Figura
         }
         else
         {
-            g.fillOval(
+            g.setColor(cor);
+            g.fillRect(
                     ((this.p1.getX() + this.p2.getX())/2) - Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
                     ((this.p1.getY() + this.p2.getY())/2) - Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY()),
                     2 * Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
                     2 * Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY())
             );
         }
+
     }
 
     public String toString()

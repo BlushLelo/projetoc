@@ -1,70 +1,81 @@
 import java.awt.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Circulo extends Figura {
+public class Quadrado extends Figura
+{
     protected Ponto p1, p2;
     protected boolean preenchido;
 
-    public Circulo(int x1, int y1, int x2, int y2, boolean preenchido) {
-        this(x1, y1, x2, y2, Color.BLACK, preenchido);
+    public Quadrado (int x1, int y1, int x2, int y2, boolean preenchido)
+    {
+        this (x1, y1, x2, y2, Color.BLACK, preenchido);
     }
 
-    public Circulo(int x1, int y1, int x2, int y2, Color cor, boolean preenchido) {
+    public Quadrado (int x1, int y1, int x2, int y2, Color cor, boolean preenchido)
+    {
         super(cor);
 
-        this.p1 = new Ponto(x1, y1, cor);
-        this.p2 = new Ponto(x2, y2, cor);
+        this.p1 = new Ponto (x1,y1,cor);
+        this.p2 = new Ponto (x2,y2,cor);
         this.preenchido = preenchido;
     }
 
-    public Circulo(String s) {
-        StringTokenizer quebrador = new StringTokenizer(s, ":");
+    public Quadrado (String s)
+    {
+        StringTokenizer quebrador = new StringTokenizer(s,":");
 
         quebrador.nextToken();
 
-        int x1 = Integer.parseInt(quebrador.nextToken());
-        int y1 = Integer.parseInt(quebrador.nextToken());
+        int   x1  = Integer.parseInt(quebrador.nextToken());
+        int   y1  = Integer.parseInt(quebrador.nextToken());
 
-        int x2 = Integer.parseInt(quebrador.nextToken());
-        int y2 = Integer.parseInt(quebrador.nextToken());
+        int   x2  = Integer.parseInt(quebrador.nextToken());
+        int   y2  = Integer.parseInt(quebrador.nextToken());
 
-        Color cor = new Color(Integer.parseInt(quebrador.nextToken()),  // R
+        Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 Integer.parseInt(quebrador.nextToken()),  // G
                 Integer.parseInt(quebrador.nextToken())); // B
 
-        this.p1 = new Ponto(x1, y1, cor);
-        this.p2 = new Ponto(x2, y2, cor);
+        this.p1  = new Ponto (x1,y1,cor);
+        this.p2  = new Ponto (x2,y2,cor);
         this.cor = cor;
     }
 
-    public void setP1(int x, int y) {
-        this.p1 = new Ponto(x, y, this.getCor());
+    public void setP1 (int x, int y)
+    {
+        this.p1 = new Ponto (x,y,this.getCor());
     }
 
-    public void setP2(int x, int y) {
-        this.p2 = new Ponto(x, y, this.getCor());
+    public void setP2 (int x, int y)
+    {
+        this.p2 = new Ponto (x,y,this.getCor());
     }
 
-    public Ponto getP1() {
+    public Ponto getP1 ()
+    {
         return this.p1;
     }
 
-    public Ponto getP2() {
+    public Ponto getP2 ()
+    {
         return this.p2;
     }
 
-    public void torneSeVisivel(Graphics g) {
-        if (!preenchido) {
-            g.setColor(this.cor);
-            g.drawOval(
+    public void torneSeVisivel (Graphics g)
+    {
+        if(!preenchido) {
+            g.setColor(cor);
+            g.drawRect(
                     Math.abs(this.p2.getX() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
                     Math.abs(this.p2.getY() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
                     2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2))),
                     2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))
             );
-        } else {
+        }
+        else
+        {
             g.setColor(cor);
-            g.fillOval(
+            g.fillRect(
                     Math.abs(this.p2.getX() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
                     Math.abs(this.p2.getY() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
                     2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2))),
@@ -74,7 +85,8 @@ public class Circulo extends Figura {
 
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "r:" +
                 this.p1.getX() +
                 ":" +
