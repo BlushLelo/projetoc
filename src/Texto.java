@@ -1,27 +1,30 @@
 import org.omg.CORBA.INTERNAL;
 
 import javax.swing.*;
+import javax.xml.soap.Text;
 import java.awt.*;
 import java.util.*;
 
 public class Texto extends Figura
 {
     protected int x,  y;
-    protected String texto;
+    protected String textoDigitado;
+    protected Font fontStyle;
 
-    public Texto (int x, int y, String texto)
+    public Texto (int x, int y, String texto, Font fontStyle)
     {
-        this (x, y, texto, Color.BLACK);
+        this (x, y, texto, fontStyle, Color.BLACK);
     }
 
-    public Texto (int x, int y, String texto, Color cor)
+    public Texto (int x, int y, String texto, Font fontStyle,Color cor)
     {
         super (cor);
 
         this.x = x;
         this.y = y;
-        this.texto = texto;
+        this.textoDigitado = texto;
         this.cor = cor;
+        this.fontStyle = fontStyle;
     }
 
     public Texto (String s)
@@ -60,8 +63,9 @@ public class Texto extends Figura
 
     public void torneSeVisivel (Graphics g)
     {
+        g.setFont(this.fontStyle);
         g.setColor (this.cor);
-        g.drawString (this.texto ,this.x, this.y);
+        g.drawString (this.textoDigitado ,this.x, this.y);
     }
 
     public String toString()

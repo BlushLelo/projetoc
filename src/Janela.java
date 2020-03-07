@@ -45,7 +45,7 @@ public class Janela extends JFrame {
             esperaInicioElipse,
             esperaFimElipse,
             esperaTexto;
-    protected boolean isPreenchido, isNegrito, isItalico, isSublinhado;
+    protected boolean isPreenchido;
 
     protected Color corAtual = Color.BLACK;
     protected Ponto p1;
@@ -183,6 +183,7 @@ public class Janela extends JFrame {
         btnQuad.addActionListener(new DesenhoDeQuadrado());
         btnElipse.addActionListener(new DesenhoElipse());
         btnText.addActionListener(new AdicionaTexto());
+//        btnText.addKeyListener( new AdicionaTexto());
 
 
         JPanel pnlBotoes = new JPanel();
@@ -300,18 +301,12 @@ public class Janela extends JFrame {
 //                JOptionPane textPanel = new JOptionPane();
 //                textoDigitado = textPanel.showInputDialog(this, "Digite um texto.");
                 esperaTexto = false;
-                statusBar1.setText("Mensagem: Esolha o estilo do texto a ser criado.");
-                //font dialog
-                JFontChooser fontChooser = new JFontChooser();
-                if(fontChooser.showDialog(this) == JFontChooser.OK_OPTION){
-                    fontAtual = fontChooser.getSelectedFont();
-                }
-                isSublinhado = fontAtual.isTransformed();
-                isItalico = fontAtual.isItalic();
-                isNegrito = fontAtual.isBold();
 
 
-//                figuras.add(new Texto(e.getX(), e.getY(), "aa", corAtual));
+
+
+
+                figuras.add(new Texto(e.getX(), e.getY(), "meu texto de test", fontAtual,corAtual));
                 statusBar1.setText("Mensagem:");
             }
         }
@@ -440,8 +435,14 @@ public class Janela extends JFrame {
     protected class AdicionaTexto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             esperaTexto = true;
+            statusBar1.setText("Mensagem: clique onde será adicionado o texto e escolha a font");
 
-            statusBar1.setText("Mensagem: clique onde será adicionado o texto");
+            JFontChooser fontChooser = new JFontChooser();
+            if(fontChooser.showDialog(null) == JFontChooser.OK_OPTION){
+                fontAtual = fontChooser.getSelectedFont();
+            }
+            statusBar1.setText("Mensagem: Digite o texto a ser inserido.");
         }
     }
+
 }
