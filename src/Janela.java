@@ -1,4 +1,5 @@
 import javafx.scene.control.TextFormatter;
+import say.swing.JFontChooser;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -37,7 +38,6 @@ public class Janela extends JFrame {
             esperaFimReta,
             esperaInicioCirculo,
             esperaFimCirculo,
-            isPreenchido,
             esperaInicioRetangulo,
             esperaFimRetangulo,
             esperaInicioQuadrado,
@@ -45,10 +45,12 @@ public class Janela extends JFrame {
             esperaInicioElipse,
             esperaFimElipse,
             esperaTexto;
+    protected boolean isPreenchido, isNegrito, isItalico, isSublinhado;
 
     protected Color corAtual = Color.BLACK;
     protected Ponto p1;
-    protected String texto;
+    protected Font fontAtual;
+    protected String textoDigitado;
 
     protected Vector<Figura> figuras = new Vector<Figura>();
 
@@ -295,14 +297,21 @@ public class Janela extends JFrame {
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");
             } else if (esperaTexto) {
-                String temp = "";
+//                JOptionPane textPanel = new JOptionPane();
+//                textoDigitado = textPanel.showInputDialog(this, "Digite um texto.");
                 esperaTexto = false;
-                //String textoDigitado = JOptionPane.showInputDialog(this,"Digite o texto desejado");
-                //texto = textoDigitado;
-                JOptionPane pane = new JOptionPane();
-                texto = JOptionPane.showInputDialog(this, "Texto a ser adicionado.");
+                statusBar1.setText("Mensagem: Esolha o estilo do texto a ser criado.");
+                //font dialog
+                JFontChooser fontChooser = new JFontChooser();
+                if(fontChooser.showDialog(this) == JFontChooser.OK_OPTION){
+                    fontAtual = fontChooser.getSelectedFont();
+                }
+                isSublinhado = fontAtual.isTransformed();
+                isItalico = fontAtual.isItalic();
+                isNegrito = fontAtual.isBold();
 
-                figuras.add(new Texto(e.getX(), e.getY(), texto, corAtual));
+
+//                figuras.add(new Texto(e.getX(), e.getY(), "aa", corAtual));
                 statusBar1.setText("Mensagem:");
             }
         }

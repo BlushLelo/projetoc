@@ -1,3 +1,5 @@
+import org.omg.CORBA.INTERNAL;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -19,6 +21,7 @@ public class Texto extends Figura
         this.x = x;
         this.y = y;
         this.texto = texto;
+        this.cor = cor;
     }
 
     public Texto (String s)
@@ -33,7 +36,6 @@ public class Texto extends Figura
         this.cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 Integer.parseInt(quebrador.nextToken()),  // G
                 Integer.parseInt(quebrador.nextToken())); // B
-        this.texto = quebrador.nextToken();
     }
 
     public void setX (int x)
@@ -64,7 +66,7 @@ public class Texto extends Figura
 
     public String toString()
     {
-        return "p:" +
+        return "t:" +
                 this.x +
                 ":" +
                 this.y +
