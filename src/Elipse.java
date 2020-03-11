@@ -63,22 +63,27 @@ public class Elipse extends Figura
 
     public void torneSeVisivel (Graphics g)
     {
+    	int raiox, raioy;
+    	if(Math.abs(this.p1.getX() - this.p2.getX()) < 10) raiox = 10;
+    	else raiox = Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX());
+    	if(Math.abs(this.p1.getY() - this.p2.getY()) < 10) raioy = 10;
+    	else raioy = Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY());
         g.setColor(this.cor);
         if(!preenchido) {
             g.drawOval(
-                    ((this.p1.getX() + this.p2.getX())/2) - Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    ((this.p1.getY() + this.p2.getY())/2) - Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY()),
-                    2 * Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    2 * Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY())
+                    ((this.p1.getX() + this.p2.getX())/2) - raiox,
+                    ((this.p1.getY() + this.p2.getY())/2) - raioy,
+                    2 * raiox,
+                    2 * raioy
             );
         }
         else
         {
             g.fillOval(
-                    ((this.p1.getX() + this.p2.getX())/2) - Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    ((this.p1.getY() + this.p2.getY())/2) - Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY()),
-                    2 * Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    2 * Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY())
+            		 ((this.p1.getX() + this.p2.getX())/2) - raiox,
+                     ((this.p1.getY() + this.p2.getY())/2) - raioy,
+                     2 * raiox,
+                     2 * raioy
             );
         }
     }

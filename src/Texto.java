@@ -1,9 +1,7 @@
-import org.omg.CORBA.INTERNAL;
-
-import javax.swing.*;
-import javax.xml.soap.Text;
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.StringTokenizer;
 
 public class Texto extends Figura
 {

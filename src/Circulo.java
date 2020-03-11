@@ -54,21 +54,21 @@ public class Circulo extends Figura {
     }
 
     public void torneSeVisivel(Graphics g) {
+    	 g.setColor(this.cor);
+         int raio = (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)));
         if (!preenchido) {
-            g.setColor(this.cor);
             g.drawOval(
-                    Math.abs(this.p2.getX() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
-                    Math.abs(this.p2.getY() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
-                    2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2))),
-                    2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))
+                    Math.abs(this.p2.getX() - raio),
+                    Math.abs(this.p2.getY() - raio),
+                    2 * raio,
+                    2 * raio
             );
         } else {
-            g.setColor(cor);
             g.fillOval(
-                    Math.abs(this.p2.getX() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
-                    Math.abs(this.p2.getY() - (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))),
-                    2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2))),
-                    2 * (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)))
+            		 Math.abs(this.p2.getX() - raio),
+                     Math.abs(this.p2.getY() - raio),
+                     2 * raio,
+                     2 * raio
             );
         }
 

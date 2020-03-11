@@ -1,14 +1,34 @@
-import javafx.scene.control.TextFormatter;
 import say.swing.JFontChooser;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.sound.midi.SysexMessage;
-import javax.swing.*;
-import javax.imageio.*;
-import javax.swing.event.*;
-import java.io.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Janela extends JFrame {
     protected static final long serialVersionUID = 1L;
@@ -55,7 +75,7 @@ public class Janela extends JFrame {
     protected Vector<Figura> figuras = new Vector<Figura>();
 
     public Janela() {
-        super("Editor Gráfico");
+        super("Editor Gr�fico");
 
         try {
             Image btnTextImg = ImageIO.read(getClass().getResource("resources/texto.jpg"));
@@ -183,7 +203,6 @@ public class Janela extends JFrame {
         btnQuad.addActionListener(new DesenhoDeQuadrado());
         btnElipse.addActionListener(new DesenhoElipse());
         btnText.addActionListener(new AdicionaTexto());
-//        btnText.addKeyListener( new AdicionaTexto());
 
 
         JPanel pnlBotoes = new JPanel();
@@ -243,69 +262,165 @@ public class Janela extends JFrame {
                 figuras.add(new Ponto(e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 esperaPonto = false;
+                
             } else if (esperaInicioReta) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
-                esperaInicioReta = false;
                 esperaFimReta = true;
+                esperaInicioReta = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 statusBar1.setText("Mensagem: clique o ponto final da reta");
             } else if (esperaFimReta) {
-                esperaInicioReta = false;
+                esperaInicioReta = true;
                 esperaFimReta = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 figuras.add(new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
-                statusBar1.setText("Mensagem:");
+                statusBar1.setText("Mensagem: clique o ponto inicial da reta");
+                
             } else if (esperaInicioCirculo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
-                esperaInicioCirculo = false;
                 esperaFimCirculo = true;
+                esperaInicioCirculo = false;
+               esperaInicioReta = false;
+               esperaFimReta = false;
+               esperaInicioRetangulo = false;
+               esperaFimRetangulo = false;
+               esperaInicioQuadrado = false;
+               esperaFimQuadrado = false;
+               esperaInicioElipse = false;
+               esperaFimElipse = false;
                 statusBar1.setText("Mensagem: clique o centro do circulo");
             } else if (esperaFimCirculo) {
-                esperaInicioCirculo = false;
+                esperaInicioCirculo = true;
                 esperaFimCirculo = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 figuras.add(new Circulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
+                
             } else if (esperaInicioRetangulo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
-                esperaInicioRetangulo = false;
                 esperaFimRetangulo = true;
+                esperaInicioRetangulo = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 statusBar1.setText("Mensagem: clique o fim do retangulo");
             } else if (esperaFimRetangulo) {
-                esperaInicioRetangulo = false;
+                esperaInicioRetangulo = true;
                 esperaFimRetangulo = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 figuras.add(new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
+                
             } else if (esperaInicioQuadrado) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
-                esperaInicioQuadrado = false;
                 esperaFimQuadrado = true;
+                esperaInicioQuadrado = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 statusBar1.setText("Mensagem: clique o fim do quadrado");
             } else if (esperaFimQuadrado) {
-                esperaInicioQuadrado = false;
+                esperaInicioQuadrado = true;
                 esperaFimQuadrado = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 figuras.add(new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
+                
             } else if (esperaInicioElipse) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
                 esperaInicioElipse = false;
                 esperaFimElipse = true;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
                 statusBar1.setText("Mensagem: clique o ponto final da elipse");
             } else if (esperaFimElipse) {
+            	esperaInicioElipse = true;
                 esperaFimElipse = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
                 figuras.add(new Elipse(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
-                statusBar1.setText("Mensagem:");
+                statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
+                
             } else if (esperaTexto) {
 //                JOptionPane textPanel = new JOptionPane();
 //                textoDigitado = textPanel.showInputDialog(this, "Digite um texto.");
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
                 esperaTexto = false;
-
-
-
-
-
+                
                 figuras.add(new Texto(e.getX(), e.getY(), "meu texto de test", fontAtual,corAtual));
                 statusBar1.setText("Mensagem:");
             }
@@ -336,6 +451,14 @@ public class Janela extends JFrame {
             esperaPonto = true;
             esperaInicioReta = false;
             esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
 
             statusBar1.setText("Mensagem: clique o local do ponto desejado");
         }
@@ -346,6 +469,14 @@ public class Janela extends JFrame {
             esperaPonto = false;
             esperaInicioReta = true;
             esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial da reta");
         }
@@ -370,6 +501,13 @@ public class Janela extends JFrame {
             esperaInicioReta = false;
             esperaFimReta = false;
             esperaInicioCirculo = true;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
 
 
             statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
@@ -397,7 +535,14 @@ public class Janela extends JFrame {
             esperaPonto = false;
             esperaInicioReta = false;
             esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
             esperaInicioRetangulo = true;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
         }
@@ -411,8 +556,12 @@ public class Janela extends JFrame {
             esperaFimReta = false;
             esperaInicioCirculo = false;
             esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
             esperaInicioQuadrado = true;
-            ;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
         }
@@ -426,14 +575,30 @@ public class Janela extends JFrame {
             esperaFimReta = false;
             esperaInicioCirculo = false;
             esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
             esperaInicioElipse = true;
+            esperaFimElipse = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
         }
     }
-
     protected class AdicionaTexto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            esperaPonto = false;
+            esperaInicioReta = false;
+            esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
+
             esperaTexto = true;
             statusBar1.setText("Mensagem: clique onde será adicionado o texto e escolha a font");
 
