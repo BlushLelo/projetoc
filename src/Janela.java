@@ -1,38 +1,21 @@
+import org.apache.commons.lang.StringUtils;
 import say.swing.JFontChooser;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.util.Vector;
-
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.util.Vector;
 
 public class Janela extends JFrame {
     protected static final long serialVersionUID = 1L;
 
+    Container cntForm = this.getContentPane();
     protected JButton btnPonto = new JButton("Ponto"),
             btnLinha = new JButton("Linha"),
             btnCirculo = new JButton("Circulo"),
@@ -230,7 +213,7 @@ public class Janela extends JFrame {
         pnlStatus.add(statusBar1);
         pnlStatus.add(statusBar2);
 
-        Container cntForm = this.getContentPane();
+
         cntForm.setLayout(new BorderLayout());
         cntForm.add(pnlBotoes, BorderLayout.NORTH);
         cntForm.add(pnlDesenho, BorderLayout.CENTER);
@@ -262,7 +245,7 @@ public class Janela extends JFrame {
                 figuras.add(new Ponto(e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 esperaPonto = false;
-                
+
             } else if (esperaInicioReta) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
                 esperaFimReta = true;
@@ -290,20 +273,20 @@ public class Janela extends JFrame {
                 figuras.add(new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial da reta");
-                
+
             } else if (esperaInicioCirculo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
                 esperaFimCirculo = true;
                 esperaInicioCirculo = false;
-               esperaInicioReta = false;
-               esperaFimReta = false;
-               esperaInicioRetangulo = false;
-               esperaFimRetangulo = false;
-               esperaInicioQuadrado = false;
-               esperaFimQuadrado = false;
-               esperaInicioElipse = false;
-               esperaFimElipse = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioRetangulo = false;
+                esperaFimRetangulo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
                 statusBar1.setText("Mensagem: clique o centro do circulo");
             } else if (esperaFimCirculo) {
                 esperaInicioCirculo = true;
@@ -319,7 +302,7 @@ public class Janela extends JFrame {
                 figuras.add(new Circulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
-                
+
             } else if (esperaInicioRetangulo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
@@ -348,7 +331,7 @@ public class Janela extends JFrame {
                 figuras.add(new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
-                
+
             } else if (esperaInicioQuadrado) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
@@ -377,7 +360,7 @@ public class Janela extends JFrame {
                 figuras.add(new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
-                
+
             } else if (esperaInicioElipse) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
                 esperaInicioElipse = false;
@@ -392,7 +375,7 @@ public class Janela extends JFrame {
                 esperaFimCirculo = false;
                 statusBar1.setText("Mensagem: clique o ponto final da elipse");
             } else if (esperaFimElipse) {
-            	esperaInicioElipse = true;
+                esperaInicioElipse = true;
                 esperaFimElipse = false;
                 esperaInicioReta = false;
                 esperaFimReta = false;
@@ -405,7 +388,7 @@ public class Janela extends JFrame {
                 figuras.add(new Elipse(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
-                
+
             } else if (esperaTexto) {
 //                JOptionPane textPanel = new JOptionPane();
 //                textoDigitado = textPanel.showInputDialog(this, "Digite um texto.");
@@ -420,8 +403,36 @@ public class Janela extends JFrame {
                 esperaInicioCirculo = false;
                 esperaFimCirculo = false;
                 esperaTexto = false;
-                
-                figuras.add(new Texto(e.getX(), e.getY(), "meu texto de test", fontAtual,corAtual));
+
+                JTextArea textArea = new JTextArea(0, 0);
+                JTextField textField = new JTextField();
+//                pnlDesenho.add(textField, BorderLayout.CENTER);
+                add(textField);
+
+                textField.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent x) {
+                        textArea.setText(textField.getText());
+                        figuras.add(new Texto(e.getX(), e.getY(), textArea.getText(), fontAtual, corAtual));
+                        figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent x) {
+                        textArea.setText(textField.getText());
+                        figuras.add(new Texto(e.getX(), e.getY(), StringUtils.chop(textArea.getText()), fontAtual, corAtual));
+                        System.out.println(StringUtils.chop(textArea.getText()));
+                        figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+
+                    }
+                });
+
+
                 statusBar1.setText("Mensagem:");
             }
         }
@@ -444,6 +455,7 @@ public class Janela extends JFrame {
         public void mouseMoved(MouseEvent e) {
             statusBar2.setText("Coordenada: " + e.getX() + "," + e.getY());
         }
+
     }
 
     protected class DesenhoDePonto implements ActionListener {
@@ -585,7 +597,8 @@ public class Janela extends JFrame {
             statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
         }
     }
-    protected class AdicionaTexto implements ActionListener {
+
+    protected class AdicionaTexto implements ActionListener, KeyListener {
         public void actionPerformed(ActionEvent e) {
             esperaPonto = false;
             esperaInicioReta = false;
@@ -600,13 +613,29 @@ public class Janela extends JFrame {
             esperaFimElipse = false;
 
             esperaTexto = true;
-            statusBar1.setText("Mensagem: clique onde ser√° adicionado o texto e escolha a font");
+            statusBar1.setText("Mensagem: escolha a font a ser usado no texto.");
 
+            //aqui tem a font
             JFontChooser fontChooser = new JFontChooser();
-            if(fontChooser.showDialog(null) == JFontChooser.OK_OPTION){
+            if (fontChooser.showDialog(null) == JFontChooser.OK_OPTION) {
                 fontAtual = fontChooser.getSelectedFont();
             }
-            statusBar1.setText("Mensagem: Digite o texto a ser inserido.");
+
+            statusBar1.setText("Mensagem: Clique onde ser· adicionado o texto.");
+        }
+
+        public void keyTyped(KeyEvent e) {
+            //nothing
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int keyCode = e.getKeyCode();
+            System.out.println("Key: " + keyCode);
+        }
+
+        public void keyReleased(KeyEvent e) {
+            //nothing
         }
     }
 
