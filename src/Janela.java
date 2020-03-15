@@ -54,6 +54,9 @@ public class Janela extends JFrame {
     protected Ponto p1;
     protected Font fontAtual;
     protected String textoDigitado = "";
+    protected boolean isTyping = false;
+    protected int txtCordX = 0;
+    protected int txtCordY = 0;
 
     protected Vector<Figura> figuras = new Vector<Figura>();
 
@@ -236,6 +239,7 @@ public class Janela extends JFrame {
             this.addKeyListener(this);
             this.addFocusListener(this);
 
+            this.setFocusable(true);
             this.requestFocus();
         }
 
@@ -415,6 +419,7 @@ public class Janela extends JFrame {
                 esperaInicioCirculo = false;
                 esperaFimCirculo = false;
                 esperaTexto = false;
+                isTyping = true;
 
 //                JTextArea textArea = new JTextArea(0, 0);
 //                JTextField textField = new JTextField();
@@ -432,7 +437,12 @@ public class Janela extends JFrame {
 
 
 
-                statusBar1.setText("Mensagem: saiu");
+                statusBar1.setText("Mensagem: Digite o texto desejado");
+                if(isTyping) {
+                    this.requestFocus();
+                    txtCordX = e.getX();
+                    txtCordY = e.getY();
+                }
             }
         }
 
@@ -457,12 +467,18 @@ public class Janela extends JFrame {
 
         @Override
         public void keyTyped(KeyEvent x) {
-            System.out.println("keyTYPER aqui");
-            //x.getKeyChar()
-            textoDigitado+=x.getKeyChar();
-            figuras.add(new Texto(300, 500, textoDigitado, fontAtual, corAtual));
-            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
-            System.out.println("aa");
+            if(x.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                isTyping = false;
+                statusBar1.setText("Mensagem: ");
+                textoDigitado = "";
+                txtCordX = 0;
+                txtCordY = 0;
+            }
+            if(isTyping) {
+                textoDigitado += x.getKeyChar();
+                figuras.add(new Texto(txtCordX, txtCordY, textoDigitado, fontAtual, corAtual));
+                figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+            }
         }
 
         @Override
@@ -616,7 +632,7 @@ public class Janela extends JFrame {
         }
     }
 
-    protected class AdicionaTexto implements ActionListener, KeyListener {
+    protected class AdicionaTexto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             esperaPonto = false;
             esperaInicioReta = false;
@@ -639,21 +655,9 @@ public class Janela extends JFrame {
                 fontAtual = fontChooser.getSelectedFont();
             }
 
+            //limpa textoDigitado
+            textoDigitado = "";
             statusBar1.setText("Mensagem: Clique onde será adicionado o texto.");
-        }
-
-        public void keyTyped(KeyEvent e) {
-            //nothing
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            int keyCode = e.getKeyCode();
-            System.out.println("Key: " + keyCode);
-        }
-
-        public void keyReleased(KeyEvent e) {
-            //nothing
         }
     }
 
