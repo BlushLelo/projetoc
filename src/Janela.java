@@ -1,4 +1,4 @@
-import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.lang.StringUtils;
 import say.swing.JFontChooser;
 
 import javax.imageio.ImageIO;
@@ -53,7 +53,7 @@ public class Janela extends JFrame {
     protected Color corAtual = Color.BLACK;
     protected Ponto p1;
     protected Font fontAtual;
-    protected String textoDigitado;
+    protected String textoDigitado = "";
 
     protected Vector<Figura> figuras = new Vector<Figura>();
 
@@ -226,13 +226,27 @@ public class Janela extends JFrame {
     }
 
     protected class MeuJPanel extends JPanel
-            implements MouseListener,
+            implements MouseListener, KeyListener, FocusListener,
             MouseMotionListener {
         public MeuJPanel() {
             super();
 
             this.addMouseListener(this);
             this.addMouseMotionListener(this);
+            this.addKeyListener(this);
+            this.addFocusListener(this);
+
+            this.requestFocus();
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            //nothing
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            this.requestFocus();
         }
 
         public void paint(Graphics g) {
@@ -390,8 +404,6 @@ public class Janela extends JFrame {
                 statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
 
             } else if (esperaTexto) {
-//                JOptionPane textPanel = new JOptionPane();
-//                textoDigitado = textPanel.showInputDialog(this, "Digite um texto.");
                 esperaInicioElipse = false;
                 esperaFimElipse = false;
                 esperaInicioReta = false;
@@ -404,36 +416,23 @@ public class Janela extends JFrame {
                 esperaFimCirculo = false;
                 esperaTexto = false;
 
-                JTextArea textArea = new JTextArea(0, 0);
-                JTextField textField = new JTextField();
+//                JTextArea textArea = new JTextArea(0, 0);
+//                JTextField textField = new JTextField();
 //                pnlDesenho.add(textField, BorderLayout.CENTER);
-                add(textField);
+//                add(textField);
 
-                textField.getDocument().addDocumentListener(new DocumentListener() {
-                    @Override
-                    public void insertUpdate(DocumentEvent x) {
-                        textArea.setText(textField.getText());
-                        figuras.add(new Texto(e.getX(), e.getY(), textArea.getText(), fontAtual, corAtual));
-                        figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+//                textField.grabFocus();
 
-                    }
-
-                    @Override
-                    public void removeUpdate(DocumentEvent x) {
-                        textArea.setText(textField.getText());
-                        figuras.add(new Texto(e.getX(), e.getY(), StringUtils.chop(textArea.getText()), fontAtual, corAtual));
-                        System.out.println(StringUtils.chop(textArea.getText()));
-                        figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
-                    }
-
-                    @Override
-                    public void changedUpdate(DocumentEvent e) {
-
-                    }
-                });
+//                textField.getDocument().addDocumentListener(new DocumentListener(){
+//                    @Override
+//                    public void insertUpdate(DocumentEvent x) {
+//                        figuras.add(new Texto(e.getX(), e.getY(), textField.getText(), fontAtual, corAtual));
+//                        figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+//                    }
 
 
-                statusBar1.setText("Mensagem:");
+
+                statusBar1.setText("Mensagem: saiu");
             }
         }
 
@@ -456,6 +455,25 @@ public class Janela extends JFrame {
             statusBar2.setText("Coordenada: " + e.getX() + "," + e.getY());
         }
 
+        @Override
+        public void keyTyped(KeyEvent x) {
+            System.out.println("keyTYPER aqui");
+            //x.getKeyChar()
+            textoDigitado+=x.getKeyChar();
+            figuras.add(new Texto(300, 500, textoDigitado, fontAtual, corAtual));
+            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+            System.out.println("aa");
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            //nothing
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            //nothing
+        }
     }
 
     protected class DesenhoDePonto implements ActionListener {
