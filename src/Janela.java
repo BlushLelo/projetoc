@@ -437,11 +437,11 @@ public class Janela extends JFrame {
 
 
 
-                statusBar1.setText("Mensagem: Digite o texto desejado");
                 if(isTyping) {
-                    this.requestFocus();
                     txtCordX = e.getX();
                     txtCordY = e.getY();
+                    this.requestFocus();
+                    statusBar1.setText("Mensagem: Digite o texto desejado");
                 }
             }
         }
