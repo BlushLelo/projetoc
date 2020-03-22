@@ -1,3 +1,4 @@
+import javax.crypto.CipherOutputStream;
 import java.awt.*;
 import java.util.StringTokenizer;
 
@@ -75,7 +76,7 @@ public class Circulo extends Figura {
     }
 
     public String toString() {
-        return "r:" +
+        return "c:" +
                 this.p1.getX() +
                 ":" +
                 this.p1.getY() +
@@ -88,6 +89,8 @@ public class Circulo extends Figura {
                 ":" +
                 this.getCor().getGreen() +
                 ":" +
-                this.getCor().getBlue();
+                this.getCor().getBlue() +
+                ":" +
+                this.preenchido;
     }
 }

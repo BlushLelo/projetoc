@@ -77,6 +77,14 @@ public class Texto extends Figura
                 ":" +
                 this.getCor().getGreen() +
                 ":" +
-                this.getCor().getBlue();
+                this.getCor().getBlue() +
+                ":" +
+                this.fontStyle.getFontName() + //font family name String
+                ":" +
+                this.fontStyle.getStyle() + //0-plain 1-bold 2-italic 3-boldItalic
+                ":" +
+                this.fontStyle.getSize() + //font size int
+                ":" +
+                this.textoDigitado;
     }
 }

@@ -2,14 +2,16 @@
 import say.swing.JFontChooser;
 
 import javax.imageio.ImageIO;
+import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.Vector;
 
 public class Janela extends JFrame {
@@ -57,6 +59,7 @@ public class Janela extends JFrame {
     protected boolean isTyping = false;
     protected int txtCordX = 0;
     protected int txtCordY = 0;
+    protected String savedContent = "";
 
     protected Vector<Figura> figuras = new Vector<Figura>();
 
@@ -189,6 +192,7 @@ public class Janela extends JFrame {
         btnQuad.addActionListener(new DesenhoDeQuadrado());
         btnElipse.addActionListener(new DesenhoElipse());
         btnText.addActionListener(new AdicionaTexto());
+        btnSalvar.addActionListener(new SalvarDesenho());
 
 
         JPanel pnlBotoes = new JPanel();
@@ -250,7 +254,7 @@ public class Janela extends JFrame {
 
         @Override
         public void focusLost(FocusEvent e) {
-            this.requestFocus();
+            //this.requestFocus();
         }
 
         public void paint(Graphics g) {
@@ -263,6 +267,8 @@ public class Janela extends JFrame {
                 figuras.add(new Ponto(e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 esperaPonto = false;
+
+                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioReta) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
@@ -295,6 +301,8 @@ public class Janela extends JFrame {
                 figuras.add(new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial da reta");
+
+                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioCirculo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
@@ -329,6 +337,8 @@ public class Janela extends JFrame {
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
 
+                savedContent += figuras.lastElement().toString() + "\n";
+
             } else if (esperaInicioRetangulo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
@@ -361,6 +371,8 @@ public class Janela extends JFrame {
                 figuras.add(new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
+
+                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioQuadrado) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
@@ -395,6 +407,8 @@ public class Janela extends JFrame {
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
 
+                savedContent += figuras.lastElement().toString() + "\n";
+
             } else if (esperaInicioElipse) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
                 esperaInicioElipse = false;
@@ -427,6 +441,7 @@ public class Janela extends JFrame {
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
 
+                savedContent += figuras.lastElement().toString() + "\n";
             } else if (esperaTexto) {
                 esperaInicioElipse = false;
                 esperaFimElipse = false;
@@ -440,22 +455,6 @@ public class Janela extends JFrame {
                 esperaFimCirculo = false;
                 esperaTexto = false;
                 isTyping = true;
-
-//                JTextArea textArea = new JTextArea(0, 0);
-//                JTextField textField = new JTextField();
-//                pnlDesenho.add(textField, BorderLayout.CENTER);
-//                add(textField);
-
-//                textField.grabFocus();
-
-//                textField.getDocument().addDocumentListener(new DocumentListener(){
-//                    @Override
-//                    public void insertUpdate(DocumentEvent x) {
-//                        figuras.add(new Texto(e.getX(), e.getY(), textField.getText(), fontAtual, corAtual));
-//                        figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
-//                    }
-
-
 
                 if(isTyping) {
                     txtCordX = e.getX();
@@ -488,6 +487,11 @@ public class Janela extends JFrame {
         @Override
         public void keyTyped(KeyEvent x) {
             if(x.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                /*
+                //System.out.println(figuras.lastElement().toString());
+                aqui faz o 'salvamento' das info do texto
+                 */
+                savedContent += figuras.lastElement().toString() + "\n";
                 isTyping = false;
                 statusBar1.setText("Mensagem: ");
                 textoDigitado = "";
@@ -550,12 +554,14 @@ public class Janela extends JFrame {
 
     protected class SairDoPrograma implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            savedContent = "";
             System.exit(0);
         }
     }
 
     protected class FechamentoDeJanela extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
+            savedContent = "";
             System.exit(0);
         }
     }
@@ -678,6 +684,46 @@ public class Janela extends JFrame {
             //limpa textoDigitado
             textoDigitado = "";
             statusBar1.setText("Mensagem: Clique onde será adicionado o texto.");
+        }
+    }
+    protected class SalvarDesenho implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            esperaPonto = false;
+            esperaInicioReta = false;
+            esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
+            esperaTexto = false;
+            isTyping = false;
+
+            JFileChooser fChoose = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
+            fChoose.setFileFilter(filter);
+            File file = null;
+            System.out.println(fChoose.getCurrentDirectory());
+
+
+            if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION){
+                file = fChoose.getSelectedFile();
+            }
+            try{
+                PrintWriter writer = new PrintWriter(new FileWriter(file));
+                for (Figura aux : figuras){
+                    writer.println(aux.toString());
+                }
+//                writer.print(savedContent);
+                writer.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
         }
     }
 
