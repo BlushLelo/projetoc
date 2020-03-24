@@ -12,6 +12,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
 import java.util.Vector;
 
 public class Janela extends JFrame {
@@ -702,12 +705,11 @@ public class Janela extends JFrame {
             esperaTexto = false;
             isTyping = false;
 
-            JFileChooser fChoose = new JFileChooser();
+            String dir = System.getProperty("user.home");
+            JFileChooser fChoose = new JFileChooser(dir+ "/Downloads/"); //open at 'Downloads' folder
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
             fChoose.setFileFilter(filter);
             File file = null;
-            System.out.println(fChoose.getCurrentDirectory());
-
 
             if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION){
                 file = fChoose.getSelectedFile();
