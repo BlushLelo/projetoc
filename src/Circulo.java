@@ -1,4 +1,7 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import javax.crypto.CipherOutputStream;
+import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.StringTokenizer;
 
@@ -33,9 +36,12 @@ public class Circulo extends Figura {
                 Integer.parseInt(quebrador.nextToken()),  // G
                 Integer.parseInt(quebrador.nextToken())); // B
 
+        boolean isPreenchido = Boolean.parseBoolean(quebrador.nextToken());
+
         this.p1 = new Ponto(x1, y1, cor);
         this.p2 = new Ponto(x2, y2, cor);
         this.cor = cor;
+        this.preenchido = isPreenchido;
     }
 
     public void setP1(int x, int y) {

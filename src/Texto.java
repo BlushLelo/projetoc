@@ -37,6 +37,13 @@ public class Texto extends Figura
         this.cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 Integer.parseInt(quebrador.nextToken()),  // G
                 Integer.parseInt(quebrador.nextToken())); // B
+
+        String fontName = quebrador.nextToken();
+        int fotnStyleOpt = Integer.parseInt(quebrador.nextToken());
+        int fontSize = Integer.parseInt(quebrador.nextToken());
+        this.fontStyle = new Font(fontName,fotnStyleOpt,fontSize);
+
+        this.textoDigitado  = quebrador.nextToken();
     }
 
     public void setX (int x)

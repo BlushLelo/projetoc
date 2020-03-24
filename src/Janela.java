@@ -1,4 +1,5 @@
 //import org.apache.commons.lang.StringUtils;
+import org.omg.PortableInterceptor.INACTIVE;
 import say.swing.JFontChooser;
 
 import javax.imageio.ImageIO;
@@ -12,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.Buffer;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
@@ -196,6 +198,7 @@ public class Janela extends JFrame {
         btnElipse.addActionListener(new DesenhoElipse());
         btnText.addActionListener(new AdicionaTexto());
         btnSalvar.addActionListener(new SalvarDesenho());
+        btnAbrir.addActionListener(new AbrirDesenho());
 
 
         JPanel pnlBotoes = new JPanel();
@@ -532,6 +535,7 @@ public class Janela extends JFrame {
             esperaFimQuadrado = false;
             esperaInicioElipse = false;
             esperaFimElipse = false;
+            esperaTexto = false;
 
             statusBar1.setText("Mensagem: clique o local do ponto desejado");
         }
@@ -550,6 +554,7 @@ public class Janela extends JFrame {
             esperaFimQuadrado = false;
             esperaInicioElipse = false;
             esperaFimElipse = false;
+            esperaTexto = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial da reta");
         }
@@ -583,6 +588,7 @@ public class Janela extends JFrame {
             esperaFimQuadrado = false;
             esperaInicioElipse = false;
             esperaFimElipse = false;
+            esperaTexto = false;
 
 
             statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
@@ -618,6 +624,7 @@ public class Janela extends JFrame {
             esperaFimQuadrado = false;
             esperaInicioElipse = false;
             esperaFimElipse = false;
+            esperaTexto = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
         }
@@ -637,6 +644,7 @@ public class Janela extends JFrame {
             esperaFimQuadrado = false;
             esperaInicioElipse = false;
             esperaFimElipse = false;
+            esperaTexto = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
         }
@@ -656,6 +664,7 @@ public class Janela extends JFrame {
             esperaFimQuadrado = false;
             esperaInicioElipse = true;
             esperaFimElipse = false;
+            esperaTexto = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
         }
@@ -712,6 +721,7 @@ public class Janela extends JFrame {
             File file = null;
 
             if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION){
+                fChoose.setSelectedFile(new File(fChoose.getSelectedFile()+".paint"));
                 file = fChoose.getSelectedFile();
             }
             try{
@@ -728,5 +738,78 @@ public class Janela extends JFrame {
             statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
         }
     }
+    protected class AbrirDesenho implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            esperaPonto = false;
+            esperaInicioReta = false;
+            esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
+            esperaTexto = false;
+            isTyping = false;
 
+            String dir = System.getProperty("user.home");
+            JFileChooser fChoose = new JFileChooser(dir+ "/Downloads/"); //open at 'Downloads' folder
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
+            fChoose.setFileFilter(filter);
+            File file = null;
+
+            if (fChoose.showOpenDialog(Janela.this) == JFileChooser.APPROVE_OPTION)
+                file = fChoose.getSelectedFile();
+
+            //clean paint, frame, figuras.
+            figuras.clear();
+            pnlDesenho.repaint();
+            repaint();
+
+            try{
+                BufferedReader in = new BufferedReader(new FileReader(file));
+                String line = in.readLine();
+
+                while (line != null){
+                    switch (line.charAt(0)){
+                        case 'c':
+                            figuras.add(new Circulo(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        case 'e':
+                            figuras.add(new Elipse(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        case 'l':
+                            figuras.add(new Linha(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        case 'q':
+                            figuras.add(new Quadrado(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        case 'r':
+                            figuras.add(new Retangulo(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        case 't':
+                            figuras.add(new Texto(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                    }
+                    line = in.readLine(); //next line
+                }
+
+
+
+
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }
