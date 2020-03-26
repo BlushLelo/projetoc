@@ -723,6 +723,12 @@ public class Janela extends JFrame {
             if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION){
                 fChoose.setSelectedFile(new File(fChoose.getSelectedFile()+".paint"));
                 file = fChoose.getSelectedFile();
+                if(file.exists()){
+                    JOptionPane.showMessageDialog(null,
+                            "Ao confirmar o arquivo será sobrescrito.",
+                            "Arquivo já existente.",
+                            3);
+                }
             }
             try{
                 PrintWriter writer = new PrintWriter(new FileWriter(file));
@@ -760,13 +766,15 @@ public class Janela extends JFrame {
             fChoose.setFileFilter(filter);
             File file = null;
 
-            if (fChoose.showOpenDialog(Janela.this) == JFileChooser.APPROVE_OPTION)
+            if (fChoose.showOpenDialog(Janela.this) == JFileChooser.APPROVE_OPTION) {
                 file = fChoose.getSelectedFile();
+                //clean paint, frame, figuras.
+                figuras.clear();
+                pnlDesenho.repaint();
+                repaint();
+            }
 
-            //clean paint, frame, figuras.
-            figuras.clear();
-            pnlDesenho.repaint();
-            repaint();
+
 
             try{
                 BufferedReader in = new BufferedReader(new FileReader(file));
