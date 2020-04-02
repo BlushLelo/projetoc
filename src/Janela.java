@@ -13,11 +13,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.Buffer;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class Janela extends JFrame {
     protected static final long serialVersionUID = 1L;
@@ -34,7 +32,8 @@ public class Janela extends JFrame {
             btnSair = new JButton("Sair"),
             btnRect = new JButton("Retangulo"),
             btnQuad = new JButton("Quadrado"),
-            btnText = new JButton("Texto");
+            btnText = new JButton("Texto"),
+            btnPoligono = new JButton("Poligono");
 
     protected JCheckBox ckPreenchido = new JCheckBox("isPreechido");
 
@@ -54,7 +53,8 @@ public class Janela extends JFrame {
             esperaFimQuadrado,
             esperaInicioElipse,
             esperaFimElipse,
-            esperaTexto;
+            esperaTexto,
+            esperaInicioPoligono;
     protected boolean isPreenchido;
 
     protected Color corAtual = Color.BLACK;
@@ -64,13 +64,24 @@ public class Janela extends JFrame {
     protected boolean isTyping = false;
     protected int txtCordX = 0;
     protected int txtCordY = 0;
-    protected String savedContent = "";
+    protected ArrayList<Ponto> vetorPontosPoligono = new ArrayList<Ponto>();
+
+    protected boolean isDrawingPoligon = false;
 
     protected Vector<Figura> figuras = new Vector<Figura>();
 
     public Janela() {
         super("Editor Gráfico");
 
+        try {
+            Image btnPoligonoImg = ImageIO.read(getClass().getResource("resources/poligono.jpg"));
+            btnPoligono.setIcon(new ImageIcon(btnPoligonoImg));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Arquivo poligono.jpg nÃ£o foi encontrado",
+                    "Arquivo de imagem ausente",
+                    JOptionPane.WARNING_MESSAGE);
+        }
         try {
             Image btnTextImg = ImageIO.read(getClass().getResource("resources/texto.jpg"));
             btnText.setIcon(new ImageIcon(btnTextImg));
@@ -199,6 +210,7 @@ public class Janela extends JFrame {
         btnText.addActionListener(new AdicionaTexto());
         btnSalvar.addActionListener(new SalvarDesenho());
         btnAbrir.addActionListener(new AbrirDesenho());
+        btnPoligono.addActionListener(new DesenhoDePoligono());
 
 
         JPanel pnlBotoes = new JPanel();
@@ -213,6 +225,7 @@ public class Janela extends JFrame {
         pnlBotoes.add(btnQuad);
         pnlBotoes.add(btnCirculo);
         pnlBotoes.add(btnElipse);
+        pnlBotoes.add(btnPoligono);
         pnlBotoes.add(btnText);
         pnlBotoes.add(btnCores);
         pnlBotoes.add(btnApagar);
@@ -274,8 +287,6 @@ public class Janela extends JFrame {
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 esperaPonto = false;
 
-                savedContent += figuras.lastElement().toString() + "\n";
-
             } else if (esperaInicioReta) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
                 esperaFimReta = true;
@@ -290,6 +301,8 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 statusBar1.setText("Mensagem: clique o ponto final da reta");
             } else if (esperaFimReta) {
                 esperaInicioReta = true;
@@ -304,11 +317,11 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 figuras.add(new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial da reta");
-
-                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioCirculo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
@@ -325,6 +338,8 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 statusBar1.setText("Mensagem: clique o centro do circulo");
             } else if (esperaFimCirculo) {
                 esperaInicioCirculo = true;
@@ -339,11 +354,11 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 figuras.add(new Circulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
-
-                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioRetangulo) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
@@ -360,6 +375,8 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 statusBar1.setText("Mensagem: clique o fim do retangulo");
             } else if (esperaFimRetangulo) {
                 esperaInicioRetangulo = true;
@@ -374,11 +391,11 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 figuras.add(new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
-
-                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioQuadrado) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
@@ -395,6 +412,8 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 statusBar1.setText("Mensagem: clique o fim do quadrado");
             } else if (esperaFimQuadrado) {
                 esperaInicioQuadrado = true;
@@ -409,11 +428,12 @@ public class Janela extends JFrame {
                 esperaFimElipse = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 figuras.add(new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
 
-                savedContent += figuras.lastElement().toString() + "\n";
 
             } else if (esperaInicioElipse) {
                 p1 = new Ponto(e.getX(), e.getY(), corAtual);
@@ -429,6 +449,8 @@ public class Janela extends JFrame {
                 esperaFimCirculo = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 statusBar1.setText("Mensagem: clique o ponto final da elipse");
             } else if (esperaFimElipse) {
                 esperaInicioElipse = true;
@@ -443,11 +465,12 @@ public class Janela extends JFrame {
                 esperaFimCirculo = false;
                 esperaTexto = false;
                 isTyping = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 figuras.add(new Elipse(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual, isPreenchido));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
 
-                savedContent += figuras.lastElement().toString() + "\n";
             } else if (esperaTexto) {
                 esperaInicioElipse = false;
                 esperaFimElipse = false;
@@ -460,6 +483,8 @@ public class Janela extends JFrame {
                 esperaInicioCirculo = false;
                 esperaFimCirculo = false;
                 esperaTexto = false;
+                esperaInicioPoligono = false;
+                isDrawingPoligon = false;
                 isTyping = true;
 
                 if(isTyping) {
@@ -468,6 +493,28 @@ public class Janela extends JFrame {
                     this.requestFocus();
                     statusBar1.setText("Mensagem: Digite o texto desejado");
                 }
+            } else if(esperaInicioPoligono){
+                statusBar1.setText("Mensagem: clique o ponto inicial do poligono");
+                esperaFimRetangulo = false;
+                esperaInicioRetangulo = false;
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                esperaInicioCirculo = false;
+                esperaFimCirculo = false;
+                esperaInicioQuadrado = false;
+                esperaFimQuadrado = false;
+                esperaInicioElipse = false;
+                esperaFimElipse = false;
+                esperaTexto = false;
+                isTyping = false;
+                isDrawingPoligon = true;
+
+                if(isDrawingPoligon){
+                    this.requestFocus();
+                    vetorPontosPoligono.add(new Ponto(e.getX(), e.getY()));
+                }
+
+                statusBar1.setText("Mensagem: clique nos próximos pontos | Precione ESC para finalizar o poligono.");
             }
         }
 
@@ -492,12 +539,7 @@ public class Janela extends JFrame {
 
         @Override
         public void keyTyped(KeyEvent x) {
-            if(x.getKeyChar() == KeyEvent.VK_ESCAPE) {
-                /*
-                //System.out.println(figuras.lastElement().toString());
-                aqui faz o 'salvamento' das info do texto
-                 */
-                savedContent += figuras.lastElement().toString() + "\n";
+            if(x.getKeyChar() == KeyEvent.VK_ESCAPE && isTyping) {
                 isTyping = false;
                 statusBar1.setText("Mensagem: ");
                 textoDigitado = "";
@@ -508,6 +550,17 @@ public class Janela extends JFrame {
                 textoDigitado += x.getKeyChar();
                 figuras.add(new Texto(txtCordX, txtCordY, textoDigitado, fontAtual, corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+            }
+            if(x.getKeyChar() == KeyEvent.VK_ESCAPE && isDrawingPoligon) {
+                isDrawingPoligon = false;
+
+                ArrayList<Ponto> aux = new ArrayList<Ponto>();
+                aux = (ArrayList<Ponto>) vetorPontosPoligono.clone();
+                figuras.add(new Poligono(aux, corAtual, isPreenchido));
+//                System.out.println("aux: " + Arrays.toString(vetorPontosPoligono.toArray()));
+                figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                vetorPontosPoligono.clear();//limpa os pontos para o proximo desenho
+//                System.out.println("Size: "+figuras.size());
             }
         }
 
@@ -536,6 +589,7 @@ public class Janela extends JFrame {
             esperaInicioElipse = false;
             esperaFimElipse = false;
             esperaTexto = false;
+            isTyping = false;
 
             statusBar1.setText("Mensagem: clique o local do ponto desejado");
         }
@@ -555,6 +609,7 @@ public class Janela extends JFrame {
             esperaInicioElipse = false;
             esperaFimElipse = false;
             esperaTexto = false;
+            isTyping = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial da reta");
         }
@@ -562,14 +617,12 @@ public class Janela extends JFrame {
 
     protected class SairDoPrograma implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            savedContent = "";
             System.exit(0);
         }
     }
 
     protected class FechamentoDeJanela extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
-            savedContent = "";
             System.exit(0);
         }
     }
@@ -589,7 +642,7 @@ public class Janela extends JFrame {
             esperaInicioElipse = false;
             esperaFimElipse = false;
             esperaTexto = false;
-
+            isTyping = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do circulo");
         }
@@ -625,6 +678,7 @@ public class Janela extends JFrame {
             esperaInicioElipse = false;
             esperaFimElipse = false;
             esperaTexto = false;
+            isTyping = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do retangulo");
         }
@@ -645,6 +699,7 @@ public class Janela extends JFrame {
             esperaInicioElipse = false;
             esperaFimElipse = false;
             esperaTexto = false;
+            isTyping = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
         }
@@ -665,6 +720,7 @@ public class Janela extends JFrame {
             esperaInicioElipse = true;
             esperaFimElipse = false;
             esperaTexto = false;
+            isTyping = false;
 
             statusBar1.setText("Mensagem: clique o ponto inicial da elipse");
         }
@@ -740,8 +796,7 @@ public class Janela extends JFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
-            statusBar1.setText("Mensagem: clique o ponto inicial do quadrado");
+            statusBar1.setText("Mensagem: Desenho salvo.");
         }
     }
     protected class AbrirDesenho implements ActionListener {
@@ -773,9 +828,6 @@ public class Janela extends JFrame {
                 pnlDesenho.repaint();
                 repaint();
             }
-
-
-
             try{
                 BufferedReader in = new BufferedReader(new FileReader(file));
                 String line = in.readLine();
@@ -806,18 +858,41 @@ public class Janela extends JFrame {
                             figuras.add(new Texto(line));
                             figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                             break;
+                        case 'g':
+                            figuras.add(new Poligono(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
                     }
                     line = in.readLine(); //next line
                 }
-
-
-
-
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            statusBar1.setText("Mensagem: ");
+        }
+    }
+    protected class DesenhoDePoligono implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            isPreenchido = ckPreenchido.isSelected();
+            esperaPonto = false;
+            esperaInicioReta = false;
+            esperaFimReta = false;
+            esperaInicioCirculo = false;
+            esperaFimCirculo = false;
+            esperaInicioRetangulo = false;
+            esperaFimRetangulo = false;
+            esperaInicioQuadrado = false;
+            esperaFimQuadrado = false;
+            esperaInicioElipse = false;
+            esperaFimElipse = false;
+            esperaTexto = false;
+            isTyping = false;
+            esperaInicioPoligono = true;
+            isDrawingPoligon = true;
+
+            statusBar1.setText("Mensagem: Clique no ponto inicial do polígono.");
         }
     }
 }
