@@ -1,7 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import javax.crypto.CipherOutputStream;
-import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.StringTokenizer;
 
@@ -61,8 +57,8 @@ public class Circulo extends Figura {
     }
 
     public void torneSeVisivel(Graphics g) {
-    	 g.setColor(this.cor);
-         int raio = (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)));
+        g.setColor(this.cor);
+        int raio = (int) Math.abs(Math.sqrt(Math.pow(this.p2.getX() - this.p1.getX(), 2) + Math.pow(this.p2.getY() - this.p1.getY(), 2)));
         if (!preenchido) {
             g.drawOval(
                     Math.abs(this.p2.getX() - raio),
@@ -72,10 +68,10 @@ public class Circulo extends Figura {
             );
         } else {
             g.fillOval(
-            		 Math.abs(this.p2.getX() - raio),
-                     Math.abs(this.p2.getY() - raio),
-                     2 * raio,
-                     2 * raio
+                    Math.abs(this.p2.getX() - raio),
+                    Math.abs(this.p2.getY() - raio),
+                    2 * raio,
+                    2 * raio
             );
         }
 

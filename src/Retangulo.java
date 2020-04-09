@@ -66,23 +66,25 @@ public class Retangulo extends Figura
 
     public void torneSeVisivel (Graphics g)
     {
+        int difWidth = Math.abs(((this.p1.getX() + this.p2.getX()) / 2) - this.p1.getX());
+        int diffHeight = Math.abs(((this.p1.getY() + this.p2.getY()) / 2) - this.p1.getY());
         if(!preenchido) {
             g.setColor(cor);
             g.drawRect(
-                    ((this.p1.getX() + this.p2.getX())/2) - Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    ((this.p1.getY() + this.p2.getY())/2) - Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY()),
-                    2 * Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    2 * Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY())
+                    ((this.p1.getX() + this.p2.getX())/2) - difWidth,
+                    ((this.p1.getY() + this.p2.getY())/2) - diffHeight,
+                    2 * difWidth,
+                    2 * diffHeight
             );
         }
         else
         {
             g.setColor(cor);
             g.fillRect(
-                    ((this.p1.getX() + this.p2.getX())/2) - Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    ((this.p1.getY() + this.p2.getY())/2) - Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY()),
-                    2 * Math.abs(((this.p1.getX() + this.p2.getX())/2) - this.p1.getX()),
-                    2 * Math.abs(((this.p1.getY() + this.p2.getY())/2) - this.p1.getY())
+                    ((this.p1.getX() + this.p2.getX())/2) - difWidth,
+                    ((this.p1.getY() + this.p2.getY())/2) - diffHeight,
+                    2 * difWidth,
+                    2 * diffHeight
             );
         }
 

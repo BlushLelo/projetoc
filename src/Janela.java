@@ -1,21 +1,17 @@
 //import org.apache.commons.lang.StringUtils;
-import org.omg.PortableInterceptor.INACTIVE;
+
 import say.swing.JFontChooser;
 
 import javax.imageio.ImageIO;
-import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.Buffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class Janela extends JFrame {
     protected static final long serialVersionUID = 1L;
@@ -71,7 +67,7 @@ public class Janela extends JFrame {
     protected Vector<Figura> figuras = new Vector<Figura>();
 
     public Janela() {
-        super("Editor Gráfico");
+        super("Editor Grï¿½fico");
 
         try {
             Image btnPoligonoImg = ImageIO.read(getClass().getResource("resources/poligono.jpg"));
@@ -514,7 +510,7 @@ public class Janela extends JFrame {
                     vetorPontosPoligono.add(new Ponto(e.getX(), e.getY()));
                 }
 
-                statusBar1.setText("Mensagem: clique nos próximos pontos | Precione ESC para finalizar o poligono.");
+                statusBar1.setText("Mensagem: clique nos prï¿½ximos pontos | Precione ESC para finalizar o poligono.");
             }
         }
 
@@ -751,7 +747,7 @@ public class Janela extends JFrame {
 
             //limpa textoDigitado
             textoDigitado = "";
-            statusBar1.setText("Mensagem: Clique onde será adicionado o texto.");
+            statusBar1.setText("Mensagem: Clique onde serï¿½ adicionado o texto.");
         }
     }
     protected class SalvarDesenho implements ActionListener {
@@ -781,8 +777,8 @@ public class Janela extends JFrame {
                 file = fChoose.getSelectedFile();
                 if(file.exists()){
                     JOptionPane.showMessageDialog(null,
-                            "Ao confirmar o arquivo será sobrescrito.",
-                            "Arquivo já existente.",
+                            "Ao confirmar o arquivo serï¿½ sobrescrito.",
+                            "Arquivo jï¿½ existente.",
                             3);
                 }
             }
@@ -892,7 +888,7 @@ public class Janela extends JFrame {
             esperaInicioPoligono = true;
             isDrawingPoligon = true;
 
-            statusBar1.setText("Mensagem: Clique no ponto inicial do polígono.");
+            statusBar1.setText("Mensagem: Clique no ponto inicial do polï¿½gono.");
         }
     }
 }
