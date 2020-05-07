@@ -1,5 +1,6 @@
 //import org.apache.commons.lang.StringUtils;
 
+
 import say.swing.JFontChooser;
 
 import javax.imageio.ImageIO;
@@ -10,6 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -66,8 +68,11 @@ public class Janela extends JFrame {
 
     protected Vector<Figura> figuras = new Vector<Figura>();
 
-    public Janela() {
+    private Socket socket;
+
+    public Janela(Socket socket) throws IOException {
         super("Editor Gr�fico");
+        this.socket = socket;
 
         try {
             Image btnPoligonoImg = ImageIO.read(getClass().getResource("resources/poligono.jpg"));
@@ -483,13 +488,13 @@ public class Janela extends JFrame {
                 isDrawingPoligon = false;
                 isTyping = true;
 
-                if(isTyping) {
+                if (isTyping) {
                     txtCordX = e.getX();
                     txtCordY = e.getY();
                     this.requestFocus();
                     statusBar1.setText("Mensagem: Digite o texto desejado");
                 }
-            } else if(esperaInicioPoligono){
+            } else if (esperaInicioPoligono) {
                 statusBar1.setText("Mensagem: clique o ponto inicial do poligono");
                 esperaFimRetangulo = false;
                 esperaInicioRetangulo = false;
@@ -505,7 +510,7 @@ public class Janela extends JFrame {
                 isTyping = false;
                 isDrawingPoligon = true;
 
-                if(isDrawingPoligon){
+                if (isDrawingPoligon) {
                     this.requestFocus();
                     vetorPontosPoligono.add(new Ponto(e.getX(), e.getY()));
                 }
@@ -535,24 +540,36 @@ public class Janela extends JFrame {
 
         @Override
         public void keyTyped(KeyEvent x) {
-            if(x.getKeyChar() == KeyEvent.VK_ESCAPE && isTyping) {
+            if (x.getKeyChar() == KeyEvent.VK_ESCAPE && isTyping) {
                 isTyping = false;
                 statusBar1.setText("Mensagem: ");
                 textoDigitado = "";
                 txtCordX = 0;
                 txtCordY = 0;
             }
-            if(isTyping) {
+            if (isTyping) {
                 textoDigitado += x.getKeyChar();
                 figuras.add(new Texto(txtCordX, txtCordY, textoDigitado, fontAtual, corAtual));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
             }
-            if(x.getKeyChar() == KeyEvent.VK_ESCAPE && isDrawingPoligon) {
+            if (x.getKeyChar() == KeyEvent.VK_ESCAPE && isDrawingPoligon) {
                 isDrawingPoligon = false;
 
                 ArrayList<Ponto> aux = new ArrayList<Ponto>();
                 aux = (ArrayList<Ponto>) vetorPontosPoligono.clone();
-                figuras.add(new Poligono(aux, corAtual, isPreenchido));
+                Operacao operacao = new Operacao();
+                operacao.setOperation(1);
+                ArrayList<Figura> listaDeFiguras = new ArrayList<>();
+                Poligono poligono = new Poligono(aux, corAtual, isPreenchido);
+                listaDeFiguras.add(poligono);
+                operacao.setFiguraList(listaDeFiguras);
+                try {
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                    objectOutputStream.writeObject(operacao);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                figuras.add(poligono);
 //                System.out.println("aux: " + Arrays.toString(vetorPontosPoligono.toArray()));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 vetorPontosPoligono.clear();//limpa os pontos para o proximo desenho
@@ -750,6 +767,7 @@ public class Janela extends JFrame {
             statusBar1.setText("Mensagem: Clique onde ser� adicionado o texto.");
         }
     }
+
     protected class SalvarDesenho implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             esperaPonto = false;
@@ -767,24 +785,24 @@ public class Janela extends JFrame {
             isTyping = false;
 
             String dir = System.getProperty("user.home");
-            JFileChooser fChoose = new JFileChooser(dir+ "/Downloads/"); //open at 'Downloads' folder
+            JFileChooser fChoose = new JFileChooser(dir + "/Downloads/"); //open at 'Downloads' folder
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
             fChoose.setFileFilter(filter);
             File file = null;
 
-            if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION){
-                fChoose.setSelectedFile(new File(fChoose.getSelectedFile()+".paint"));
+            if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION) {
+                fChoose.setSelectedFile(new File(fChoose.getSelectedFile() + ".paint"));
                 file = fChoose.getSelectedFile();
-                if(file.exists()){
+                if (file.exists()) {
                     JOptionPane.showMessageDialog(null,
                             "Ao confirmar o arquivo ser� sobrescrito.",
                             "Arquivo j� existente.",
                             3);
                 }
             }
-            try{
+            try {
                 PrintWriter writer = new PrintWriter(new FileWriter(file));
-                for (Figura aux : figuras){
+                for (Figura aux : figuras) {
                     writer.println(aux.toString());
                 }
 //                writer.print(savedContent);
@@ -795,6 +813,7 @@ public class Janela extends JFrame {
             statusBar1.setText("Mensagem: Desenho salvo.");
         }
     }
+
     protected class AbrirDesenho implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             esperaPonto = false;
@@ -812,7 +831,7 @@ public class Janela extends JFrame {
             isTyping = false;
 
             String dir = System.getProperty("user.home");
-            JFileChooser fChoose = new JFileChooser(dir+ "/Downloads/"); //open at 'Downloads' folder
+            JFileChooser fChoose = new JFileChooser(dir + "/Downloads/"); //open at 'Downloads' folder
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
             fChoose.setFileFilter(filter);
             File file = null;
@@ -824,12 +843,12 @@ public class Janela extends JFrame {
                 pnlDesenho.repaint();
                 repaint();
             }
-            try{
+            try {
                 BufferedReader in = new BufferedReader(new FileReader(file));
                 String line = in.readLine();
 
-                while (line != null){
-                    switch (line.charAt(0)){
+                while (line != null) {
+                    switch (line.charAt(0)) {
                         case 'c':
                             figuras.add(new Circulo(line));
                             figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
@@ -869,6 +888,7 @@ public class Janela extends JFrame {
             statusBar1.setText("Mensagem: ");
         }
     }
+
     protected class DesenhoDePoligono implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             isPreenchido = ckPreenchido.isSelected();

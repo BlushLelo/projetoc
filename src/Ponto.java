@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class Ponto extends Figura
+public class Ponto extends Figura implements Serializable
 {
+
+    private static final long serialVersionUID = -6192761458213279090L;
     protected int x,  y;
 
     public Ponto (int x, int y)

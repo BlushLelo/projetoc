@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class Poligono extends Figura {
+public class Poligono extends Figura implements Serializable {
+
+    private static final long serialVersionUID = 4973656244032944210L;
     protected ArrayList<Ponto> pontosDoPol;
     protected boolean preenchido;
 
