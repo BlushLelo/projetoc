@@ -558,7 +558,7 @@ public class Janela extends JFrame {
                 ArrayList<Ponto> aux = new ArrayList<Ponto>();
                 aux = (ArrayList<Ponto>) vetorPontosPoligono.clone();
                 Operacao operacao = new Operacao();
-                operacao.setOperation(1);
+                operacao.setOperation("SAV");
                 ArrayList<Figura> listaDeFiguras = new ArrayList<>();
                 Poligono poligono = new Poligono(aux, corAtual, isPreenchido);
                 listaDeFiguras.add(poligono);
