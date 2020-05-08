@@ -1,8 +1,10 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class Retangulo extends Figura
+public class Retangulo extends Figura implements Serializable
 {
+    private static final long serialVersionUID = -8492157169123352509L;
     protected Ponto p1, p2;
     protected boolean preenchido;
 

@@ -557,18 +557,7 @@ public class Janela extends JFrame {
 
                 ArrayList<Ponto> aux = new ArrayList<Ponto>();
                 aux = (ArrayList<Ponto>) vetorPontosPoligono.clone();
-                Operacao operacao = new Operacao();
-                operacao.setOperation("SAV");
-                ArrayList<Figura> listaDeFiguras = new ArrayList<>();
                 Poligono poligono = new Poligono(aux, corAtual, isPreenchido);
-                listaDeFiguras.add(poligono);
-                operacao.setFiguraList(listaDeFiguras);
-                try {
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                    objectOutputStream.writeObject(operacao);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 figuras.add(poligono);
 //                System.out.println("aux: " + Arrays.toString(vetorPontosPoligono.toArray()));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
@@ -801,10 +790,17 @@ public class Janela extends JFrame {
                 }
             }
             try {
+                Operacao operacao = new Operacao();
+                operacao.setOperation("SAV");
+                ArrayList<Figura> listaDeFiguras = new ArrayList<>();
                 PrintWriter writer = new PrintWriter(new FileWriter(file));
                 for (Figura aux : figuras) {
+                    listaDeFiguras.add(aux);
                     writer.println(aux.toString());
                 }
+                operacao.setFiguraList(listaDeFiguras);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                objectOutputStream.writeObject(operacao);
 //                writer.print(savedContent);
                 writer.close();
             } catch (IOException ex) {
@@ -835,6 +831,9 @@ public class Janela extends JFrame {
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
             fChoose.setFileFilter(filter);
             File file = null;
+            Operacao operacao = new Operacao();
+            operacao.setOperation("CON");
+
 
             if (fChoose.showOpenDialog(Janela.this) == JFileChooser.APPROVE_OPTION) {
                 file = fChoose.getSelectedFile();
@@ -844,6 +843,8 @@ public class Janela extends JFrame {
                 repaint();
             }
             try {
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                objectOutputStream.writeObject(operacao);
                 BufferedReader in = new BufferedReader(new FileReader(file));
                 String line = in.readLine();
 
@@ -876,6 +877,12 @@ public class Janela extends JFrame {
                         case 'g':
                             figuras.add(new Poligono(line));
                             figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        case 'p':
+                            figuras.add(new Ponto(line));
+                            figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
+                            break;
+                        default:
                             break;
                     }
                     line = in.readLine(); //next line

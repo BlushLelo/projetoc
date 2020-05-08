@@ -1,7 +1,10 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.StringTokenizer;
 
-public class Quadrado extends Figura {
+public class Quadrado extends Figura implements Serializable {
+
+    private static final long serialVersionUID = 9120967549872685645L;
     protected Ponto p1, p2;
     protected boolean preenchido;
 

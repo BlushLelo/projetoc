@@ -1,9 +1,12 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.StringTokenizer;
 
-public class Circulo extends Figura {
+public class Circulo extends Figura implements Serializable {
+    private static final long serialVersionUID = -5168286603316803275L;
     protected Ponto p1, p2;
     protected boolean preenchido;
+
 
     public Circulo(int x1, int y1, int x2, int y2, boolean preenchido) {
         this(x1, y1, x2, y2, Color.BLACK, preenchido);

@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class Elipse extends Figura
+public class Elipse extends Figura implements Serializable
 {
+
+    private static final long serialVersionUID = 1415037501871152309L;
     protected Ponto p1, p2;
     protected boolean preenchido;
 
