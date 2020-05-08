@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 
 public class Texto extends Figura implements Serializable {
+
+    private static final long serialVersionUID = 6548308103191019816L;
     protected int x, y;
     protected String textoDigitado;
     protected Font fontStyle;
