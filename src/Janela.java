@@ -780,7 +780,11 @@ public class Janela extends JFrame {
             File file = null;
 
             if (fChoose.showSaveDialog(Janela.this) == JFileChooser.APPROVE_OPTION) {
-                fChoose.setSelectedFile(new File(fChoose.getSelectedFile() + ".paint"));
+                String fileName = fChoose.getSelectedFile().toString();
+                String substring = fileName.substring(fileName.length() - 6, fileName.length());
+                if( !substring.equals(".paint"))
+                    fChoose.setSelectedFile(new File(fChoose.getSelectedFile() + ".paint"));
+
                 file = fChoose.getSelectedFile();
                 if (file.exists()) {
                     JOptionPane.showMessageDialog(null,
