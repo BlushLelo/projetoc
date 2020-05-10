@@ -71,8 +71,9 @@ public class Janela extends JFrame {
     private Socket socket;
 
     public Janela(Socket socket) throws IOException {
-        super("Editor Gr�fico");
-        this.socket = socket;
+        super("Editor Gráfico");
+        if(socket != null)
+            this.socket = socket;
 
         try {
             Image btnPoligonoImg = ImageIO.read(getClass().getResource("resources/poligono.jpg"));
@@ -515,7 +516,7 @@ public class Janela extends JFrame {
                     vetorPontosPoligono.add(new Ponto(e.getX(), e.getY()));
                 }
 
-                statusBar1.setText("Mensagem: clique nos pr�ximos pontos | Precione ESC para finalizar o poligono.");
+                statusBar1.setText("Mensagem: clique nos próximos pontos | Precione ESC para finalizar o poligono.");
             }
         }
 
@@ -753,7 +754,7 @@ public class Janela extends JFrame {
 
             //limpa textoDigitado
             textoDigitado = "";
-            statusBar1.setText("Mensagem: Clique onde ser� adicionado o texto.");
+            statusBar1.setText("Mensagem: Clique onde será adicionado o texto.");
         }
     }
 
@@ -788,8 +789,8 @@ public class Janela extends JFrame {
                 file = fChoose.getSelectedFile();
                 if (file.exists()) {
                     JOptionPane.showMessageDialog(null,
-                            "Ao confirmar o arquivo ser� sobrescrito.",
-                            "Arquivo j� existente.",
+                            "Ao confirmar o arquivo será sobrescrito.",
+                            "Arquivo já existente.",
                             3);
                 }
             }
@@ -919,7 +920,7 @@ public class Janela extends JFrame {
             esperaInicioPoligono = true;
             isDrawingPoligon = true;
 
-            statusBar1.setText("Mensagem: Clique no ponto inicial do pol�gono.");
+            statusBar1.setText("Mensagem: Clique no ponto inicial do polígono.");
         }
     }
 }

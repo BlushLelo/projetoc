@@ -2,8 +2,14 @@ import javax.swing.JFrame;
 import java.io.IOException;
 import java.net.Socket;
 //187.74.67.11 | 2134
+
 public class Editor {
+    private static boolean runLocal = true;
+
     public static void main(String args[]) throws IOException {
-        new Janela(new Socket("187.74.67.11", 2134)).setExtendedState(JFrame.MAXIMIZED_BOTH);
+        if (runLocal)
+            new Janela(null).setExtendedState(JFrame.MAXIMIZED_BOTH);
+        else
+            new Janela(new Socket("187.74.67.11", 2134)).setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }
