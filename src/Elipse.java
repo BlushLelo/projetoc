@@ -7,6 +7,15 @@ public class Elipse extends Figura implements Serializable
 
     private static final long serialVersionUID = 1415037501871152309L;
     protected Ponto p1, p2;
+
+    public boolean isPreenchido() {
+        return preenchido;
+    }
+
+    public void setPreenchido(boolean preenchido) {
+        this.preenchido = preenchido;
+    }
+
     protected boolean preenchido;
 
     public Elipse (int x1, int y1, int x2, int y2, boolean preenchido)

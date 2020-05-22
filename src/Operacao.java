@@ -2,9 +2,19 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Operacao implements Serializable {
-    private static final long serialVersionUID = -1309972794650681881L;
+    private static final long serialVersionUID = -2829362307114855733L;
     private String operation;
     private List<Figura> figuraList;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    private String ip;
 
     public String getOperation() {
         return operation;

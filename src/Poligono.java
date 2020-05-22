@@ -19,6 +19,14 @@ public class Poligono extends Figura implements Serializable {
         this.preenchido = preenchido;
     }
 
+    public boolean isPreenchido() {
+        return preenchido;
+    }
+
+    public void setPreenchido(boolean preenchido) {
+        this.preenchido = preenchido;
+    }
+
     public Poligono(String s) {
         StringTokenizer quebrador = new StringTokenizer(s, ":");
         quebrador.nextToken();

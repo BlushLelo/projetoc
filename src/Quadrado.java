@@ -20,6 +20,14 @@ public class Quadrado extends Figura implements Serializable {
         this.preenchido = preenchido;
     }
 
+    public boolean isPreenchido() {
+        return preenchido;
+    }
+
+    public void setPreenchido(boolean preenchido) {
+        this.preenchido = preenchido;
+    }
+
     public Quadrado(String s) {
         StringTokenizer quebrador = new StringTokenizer(s, ":");
 

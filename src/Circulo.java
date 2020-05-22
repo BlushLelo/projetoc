@@ -5,6 +5,15 @@ import java.util.StringTokenizer;
 public class Circulo extends Figura implements Serializable {
     private static final long serialVersionUID = -5168286603316803275L;
     protected Ponto p1, p2;
+
+    public void setPreenchido(boolean preenchido) {
+        this.preenchido = preenchido;
+    }
+
+    public boolean isPreenchido() {
+        return preenchido;
+    }
+
     protected boolean preenchido;
 
 
