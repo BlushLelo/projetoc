@@ -25,7 +25,9 @@ public class Janela extends JFrame {
             btnElipse = new JButton("Elipse"),
             btnCores = new JButton("Cores"),
             btnAbrir = new JButton("Abrir"),
+            btnAbrirRemoto = new JButton("Abrir remoto"),
             btnSalvar = new JButton("Salvar"),
+            btnSalvarRemoto = new JButton("Salvar Remoto"),
             btnApagar = new JButton("Apagar"),
             btnSair = new JButton("Sair"),
             btnRect = new JButton("Retangulo"),
@@ -211,7 +213,9 @@ public class Janela extends JFrame {
         btnElipse.addActionListener(new DesenhoElipse());
         btnText.addActionListener(new AdicionaTexto());
         btnSalvar.addActionListener(new SalvarDesenho());
+        btnSalvarRemoto.addActionListener(new SalvarDesenhoRemoto());
         btnAbrir.addActionListener(new AbrirDesenho());
+        btnAbrirRemoto.addActionListener(new AbrirDesenhoRemoto());
         btnPoligono.addActionListener(new DesenhoDePoligono());
 
 
@@ -221,6 +225,7 @@ public class Janela extends JFrame {
 
         pnlBotoes.add(btnAbrir);
         pnlBotoes.add(btnSalvar);
+        pnlBotoes.add(btnSalvarRemoto);
         pnlBotoes.add(btnPonto);
         pnlBotoes.add(btnLinha);
         pnlBotoes.add(btnRect);
@@ -815,6 +820,12 @@ public class Janela extends JFrame {
         }
     }
 
+    protected class SalvarDesenhoRemoto implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+                //salvar desenho no banco.
+            }
+        }
+
     protected class AbrirDesenho implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             esperaPonto = false;
@@ -900,6 +911,12 @@ public class Janela extends JFrame {
             statusBar1.setText("Mensagem: ");
         }
     }
+
+    protected class AbrirDesenhoRemoto implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            //abrir desenho no bando.
+            }
+        }
 
     protected class DesenhoDePoligono implements ActionListener {
         public void actionPerformed(ActionEvent e) {

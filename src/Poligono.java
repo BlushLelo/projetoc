@@ -6,6 +6,15 @@ import java.util.StringTokenizer;
 public class Poligono extends Figura implements Serializable {
 
     private static final long serialVersionUID = 4973656244032944210L;
+
+    public ArrayList<Ponto> getPontosDoPol() {
+        return pontosDoPol;
+    }
+
+    public void setPontosDoPol(ArrayList<Ponto> pontosDoPol) {
+        this.pontosDoPol = pontosDoPol;
+    }
+
     protected ArrayList<Ponto> pontosDoPol;
     protected boolean preenchido;
 
