@@ -940,6 +940,19 @@ public class Janela extends JFrame {
     protected class AbrirDesenhoRemoto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             //abrir desenho no bando.
+
+            try {
+                Operacao operacao = new Operacao();
+                operacao.setOperation("CON");
+
+                //send IP address
+                operacao.setIp(socket.getInetAddress().getAddress().toString());
+
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                objectOutputStream.writeObject(operacao);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             }
         }
 
