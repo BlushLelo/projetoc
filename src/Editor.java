@@ -10,6 +10,6 @@ public class Editor {
         if (runLocal)
             new Janela(null).setExtendedState(JFrame.MAXIMIZED_BOTH);
         else
-            new Janela(new Socket("187.35.182.136", 2134)).setExtendedState(JFrame.MAXIMIZED_BOTH);
+            new Janela(new Socket("189.46.60.184", 2134)).setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }

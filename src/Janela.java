@@ -224,6 +224,7 @@ public class Janela extends JFrame {
         pnlBotoes.setLayout(flwBotoes);
 
         pnlBotoes.add(btnAbrir);
+        pnlBotoes.add(btnAbrirRemoto);
         pnlBotoes.add(btnSalvar);
         pnlBotoes.add(btnSalvarRemoto);
         pnlBotoes.add(btnPonto);
@@ -800,17 +801,17 @@ public class Janela extends JFrame {
                 }
             }
             try {
-                Operacao operacao = new Operacao();
-                operacao.setOperation("SAV");
+//                Operacao operacao = new Operacao();
+//                operacao.setOperation("SAV");
                 ArrayList<Figura> listaDeFiguras = new ArrayList<>();
                 PrintWriter writer = new PrintWriter(new FileWriter(file));
                 for (Figura aux : figuras) {
                     listaDeFiguras.add(aux);
                     writer.println(aux.toString());
                 }
-                operacao.setFiguraList(listaDeFiguras);
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                objectOutputStream.writeObject(operacao);
+//                operacao.setFiguraList(listaDeFiguras);
+//                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+//                objectOutputStream.writeObject(operacao);
 //                writer.print(savedContent);
                 writer.close();
             } catch (IOException ex) {
@@ -823,6 +824,30 @@ public class Janela extends JFrame {
     protected class SalvarDesenhoRemoto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
                 //salvar desenho no banco.
+            String nomeDoDesenho = JOptionPane.showInputDialog("Nome do desenho a ser salvo.");
+
+            String substring = nomeDoDesenho.substring(nomeDoDesenho.length() - 6, nomeDoDesenho.length());
+            if( !substring.equals(".paint"))
+                nomeDoDesenho = nomeDoDesenho + ".paint";
+            File file = null;
+
+            try {
+                Operacao operacao = new Operacao();
+                operacao.setOperation("SAV");
+                ArrayList<Figura> listaDeFiguras = new ArrayList<>();
+//                PrintWriter writer = new PrintWriter(new FileWriter(file));
+                for (Figura aux : figuras) {
+                    listaDeFiguras.add(aux);
+//                    writer.println(aux.toString());
+                }
+                operacao.setFiguraList(listaDeFiguras);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                objectOutputStream.writeObject(operacao);
+//                writer.print(savedContent);
+//                writer.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             }
         }
 
