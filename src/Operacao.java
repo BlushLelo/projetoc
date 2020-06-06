@@ -3,8 +3,28 @@ import java.util.List;
 
 public class Operacao implements Serializable {
     private static final long serialVersionUID = -2829362307114855733L;
+    private String nome;
+
+    public String getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(String dataHora) {
+        this.dataHora = dataHora;
+    }
+
+    private String dataHora;
+
     private String operation;
     private List<Figura> figuraList;
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
     public String getIp() {
         return ip;

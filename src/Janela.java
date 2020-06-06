@@ -12,7 +12,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 
 public class Janela extends JFrame {
@@ -822,18 +827,29 @@ public class Janela extends JFrame {
     }
 
     protected class SalvarDesenhoRemoto implements ActionListener {
+        private String getDateTime() {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            return dateFormat.format(date);
+        }
         public void actionPerformed(ActionEvent e) {
-                //salvar desenho no banco.
             String nomeDoDesenho = JOptionPane.showInputDialog("Nome do desenho a ser salvo.");
 
-            String substring = nomeDoDesenho.substring(nomeDoDesenho.length() - 6, nomeDoDesenho.length());
+            String substring = "";
+            if(nomeDoDesenho.length() >= 6)
+                substring = nomeDoDesenho.substring(nomeDoDesenho.length() - 6, nomeDoDesenho.length());
+
             if( !substring.equals(".paint"))
                 nomeDoDesenho = nomeDoDesenho + ".paint";
-            File file = null;
+//            File file = null;
 
             try {
+                System.out.println(nomeDoDesenho);
                 Operacao operacao = new Operacao();
                 operacao.setOperation("SAV");
+                operacao.setNome(nomeDoDesenho);
+                operacao.setDataHora(this.getDateTime());
+
                 ArrayList<Figura> listaDeFiguras = new ArrayList<>();
 //                PrintWriter writer = new PrintWriter(new FileWriter(file));
                 for (Figura aux : figuras) {
