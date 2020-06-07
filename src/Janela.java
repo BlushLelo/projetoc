@@ -841,26 +841,20 @@ public class Janela extends JFrame {
 
             if( !substring.equals(".paint"))
                 nomeDoDesenho = nomeDoDesenho + ".paint";
-//            File file = null;
 
             try {
-                System.out.println(nomeDoDesenho);
                 Operacao operacao = new Operacao();
                 operacao.setOperation("SAV");
                 operacao.setNome(nomeDoDesenho);
                 operacao.setDataHora(this.getDateTime());
 
                 ArrayList<Figura> listaDeFiguras = new ArrayList<>();
-//                PrintWriter writer = new PrintWriter(new FileWriter(file));
                 for (Figura aux : figuras) {
                     listaDeFiguras.add(aux);
-//                    writer.println(aux.toString());
                 }
                 operacao.setFiguraList(listaDeFiguras);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 objectOutputStream.writeObject(operacao);
-//                writer.print(savedContent);
-//                writer.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -955,7 +949,7 @@ public class Janela extends JFrame {
 
     protected class AbrirDesenhoRemoto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //abrir desenho no bando.
+            //abrir desenho no banco.
 
             try {
                 Operacao operacao = new Operacao();
