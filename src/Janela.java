@@ -950,21 +950,31 @@ public class Janela extends JFrame {
     protected class AbrirDesenhoRemoto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             //abrir desenho no banco.
+//            String nomeDoDesenho = JOptionPane.showInputDialog("Nome do desenho a ser salvo.");
+//
+//            String substring = "";
+//            if(nomeDoDesenho.length() >= 6)
+//                substring = nomeDoDesenho.substring(nomeDoDesenho.length() - 6, nomeDoDesenho.length());
+//
+//            if( !substring.equals(".paint"))
+//                nomeDoDesenho = nomeDoDesenho + ".paint";
+            //COMENTADO POIS PEGA PELO IP
+
 
             try {
                 Operacao operacao = new Operacao();
                 operacao.setOperation("CON");
-
                 //send IP address
-                operacao.setIp(socket.getInetAddress().getAddress().toString());
+                //operacao.setIp(socket.getInetAddress().getAddress().toString());
+//                operacao.setNome(nomeDoDesenho);
 
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 objectOutputStream.writeObject(operacao);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            }
         }
+    }
 
     protected class DesenhoDePoligono implements ActionListener {
         public void actionPerformed(ActionEvent e) {
