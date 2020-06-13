@@ -8,9 +8,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
+import javax.xml.soap.Text;
 import java.awt.event.*;
 import java.io.*;
+import java.awt.*;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.FieldPosition;
@@ -18,6 +19,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 public class Janela extends JFrame {
@@ -970,7 +972,51 @@ public class Janela extends JFrame {
 
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 objectOutputStream.writeObject(operacao);
-            } catch (IOException ex) {
+
+                List<OperacaoResponse> responseList = new ArrayList<>();
+                while (true) {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                    OperacaoResponse response = (OperacaoResponse) objectInputStream.readObject();
+                    if(response.getOperacao().equals("DES"))
+                        responseList.add(response);
+
+                    if(response.getOperacao().equals("FIC"))
+                        break;
+                }
+                responseList.get(0).getListaDeFiguras().stream().forEach(figura -> {
+                    if (figura instanceof Quadrado) {
+                        Quadrado figura1 = (Quadrado) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                    if(figura instanceof Linha){
+                        Linha figura1 = (Linha) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                    if(figura instanceof Circulo){
+                        Circulo figura1 = (Circulo) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                    if(figura instanceof Elipse){
+                        Elipse figura1 = (Elipse) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                    if(figura instanceof Poligono){
+                        Poligono figura1 = (Poligono) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                    if(figura instanceof Retangulo){
+                        Retangulo figura1 = (Retangulo) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                    if(figura instanceof Texto){
+                        Texto figura1 = (Texto) figura;
+                        figura1.torneSeVisivel(pnlDesenho.getGraphics());
+                    }
+                });
+
+
+
+            } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }

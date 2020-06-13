@@ -5,9 +5,11 @@ public class OperacaoResponse implements Serializable {
 
     private static final long serialVersionUID = -8167573074331114690L;
 
-    String nomeDoDesenho;
+    private String nomeDoDesenho;
 
-    List<Figura> listaDeFiguras;
+    private String operacao;
+
+    private List<Figura> listaDeFiguras;
 
     public OperacaoResponse() {
     }
@@ -31,5 +33,13 @@ public class OperacaoResponse implements Serializable {
 
     public void setListaDeFiguras(List<Figura> listaDeFiguras) {
         this.listaDeFiguras = listaDeFiguras;
+    }
+
+    public String getOperacao() {
+        return operacao;
+    }
+
+    public void setOperacao(String operacao) {
+        this.operacao = operacao;
     }
 }
