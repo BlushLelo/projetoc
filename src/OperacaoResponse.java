@@ -1,7 +1,9 @@
+import java.io.Serializable;
 import java.util.List;
 
+public class OperacaoResponse implements Serializable {
 
-public class OperacaoResponse {
+    private static final long serialVersionUID = -8167573074331114690L;
 
     String nomeDoDesenho;
 

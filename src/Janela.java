@@ -893,7 +893,7 @@ public class Janela extends JFrame {
                 pnlDesenho.repaint();
                 repaint();
             }
-            try {
+            try     {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 objectOutputStream.writeObject(operacao);
                 BufferedReader in = new BufferedReader(new FileReader(file));
