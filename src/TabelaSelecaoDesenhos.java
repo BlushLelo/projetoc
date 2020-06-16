@@ -1,3 +1,6 @@
+import javafx.geometry.HorizontalDirection;
+import jdk.nashorn.internal.runtime.ListAdapter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,62 +10,56 @@ import java.util.List;
 public class TabelaSelecaoDesenhos extends JFrame {
     private List<OperacaoResponse> responses;
 
-    JPanel painelFundo;
-    JTable tabela;
-    JScrollPane barraRolagem;
-    private int selectedIndex = 0;
-    JButton button = new JButton("Select");
+    private JPanel painelFundo;
+    private JTable tabela;
+    private JScrollPane barraRolagem;
+    private int selectedIndex = -1;
+    private JButton button = new JButton("Abrir desenho");
 
-    JList<OperacaoResponse> list = new JList<OperacaoResponse>();
-    DefaultListModel<OperacaoResponse> model = new DefaultListModel<>();
 
-    private JLabel lblNome = new JLabel();
-    private JLabel lblDataCriacao = new JLabel();
-    private JLabel lblDataAtualizacao = new JLabel();
-    private JLabel lblIpAtualizacao = new JLabel();
+    private String[] colunas = {"Nome", "Data de criação", "Data de atualização", "Conteudo","IP"};
+    private Object[][] dados = {{}};
+    public Integer getSelectedPaint(){
+        return selectedIndex;
+    }
 
-    private JPanel panel = new JPanel();
+//    private Object [][] dados = {
+//            {"desenho1", "05-04-2020","05-04-2020", "2 figuras","127.0.0.1"},
+//            {"desenho2", "05-04-2020","05-04-2020", "3 figuras","45.33.11.3"},
+//            {"deesnho3", "02-02-2020","02-02-2020", "1 figura","200.12.3.22"}
+//    };
+    public TabelaSelecaoDesenhos(List<OperacaoResponse> responses) {
+        this.responses = responses;
 
-    String[] colunas = {"Nome", "Data de criação", "Data de atualização", "Conteudo","IP"};
-    Object [][] dados = {
-            {"desenho1", "05-04-2020","05-04-2020", "2 figuras","127.0.0.1"},
-            {"desenho2", "05-04-2020","05-04-2020", "3 figuras","45.33.11.3"},
-            {"deesnho3", "02-02-2020","02-02-2020", "1 figura","200.12.3.22"}
-    };
+        Object [][] dados = {
+                {"desenho1", "05-04-2020","05-04-2020", "2 figuras","127.0.0.1"},
+                {"desenho2", "05-04-2020","05-04-2020", "3 figuras","45.33.11.3"},
+                {"deesnho3", "02-02-2020","02-02-2020", "1 figura","200.12.3.22"}
+        };
 
-    public void criaJanela(){
         painelFundo = new JPanel();
-        painelFundo.setLayout(new GridLayout(1, 1));
+        painelFundo.setLayout(new GridLayout(0,1));
         tabela = new JTable(dados, colunas);
         tabela.setDefaultEditor(Object.class, null);
         tabela.getSelectedRow();
         barraRolagem = new JScrollPane(tabela);
         painelFundo.add(barraRolagem);
         painelFundo.add(button);
+        button.setSize(300, 50);
+
+        getContentPane().add(painelFundo);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(500, 550);
+        setVisible(true);
+
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedIndex = tabela.getSelectedRow();
                 System.out.println("Selected: " + selectedIndex);
+                dispose();
             }
         });
-
-        getContentPane().add(painelFundo);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 120);
-        setVisible(true);
-
-//        selectedIndex = tabela.getSelectedRow();
-//        System.out.println("Selected: " + selectedIndex);
-    }
-
-    public Integer getSelectedPaint(){
-        return selectedIndex;
-    }
-    public TabelaSelecaoDesenhos() {
-        //this.responses = response;
-        super ("Desenhos");
-
 
 //        list.setModel(model);
 //        for (OperacaoResponse responseAux : response) {

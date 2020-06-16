@@ -951,10 +951,6 @@ public class Janela extends JFrame {
 
     protected class AbrirDesenhoRemoto implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            TabelaSelecaoDesenhos lista = new TabelaSelecaoDesenhos();
-            lista.criaJanela();
-
-            System.out.println("Selected: " + lista.getSelectedPaint());
 
             try {
                 Operacao operacao = new Operacao();
@@ -976,9 +972,15 @@ public class Janela extends JFrame {
                     }
                 }
 
+                TabelaSelecaoDesenhos tabelaDeDesenhos = new TabelaSelecaoDesenhos(responseList);
 
+                int index = -1;
+                while(tabelaDeDesenhos.getSelectedPaint() != -1){
+                    index = tabelaDeDesenhos.getSelectedPaint();
+                    System.out.println("OUTPUT Selected: " + index);
+                }
 
-                responseList.get(0).getListaDeFiguras().stream().forEach(figura -> {
+                responseList.get(index).getListaDeFiguras().stream().forEach(figura -> {
                     if (figura instanceof Quadrado) {
                         Quadrado figura1 = (Quadrado) figura;
                         figura1.torneSeVisivel(pnlDesenho.getGraphics());
