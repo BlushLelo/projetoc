@@ -953,6 +953,9 @@ public class Janela extends JFrame {
         public void actionPerformed(ActionEvent e) {
             TabelaSelecaoDesenhos lista = new TabelaSelecaoDesenhos();
             lista.criaJanela();
+
+            System.out.println("Selected: " + lista.getSelectedPaint());
+
             try {
                 Operacao operacao = new Operacao();
                 operacao.setOperation("CON");
