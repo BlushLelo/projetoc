@@ -1,5 +1,7 @@
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+
 
 public class OperacaoResponse implements Serializable {
 
@@ -9,13 +11,19 @@ public class OperacaoResponse implements Serializable {
 
     private String operacao;
 
+    private Date createdDated;
+
+    private Date updatedDate;
+
     private List<Figura> listaDeFiguras;
 
     public OperacaoResponse() {
     }
 
-    public OperacaoResponse(String nomeDoDesenho, List<Figura> listaDeFiguras) {
+    public OperacaoResponse(String nomeDoDesenho, Date createdDated, Date updatedDate, List<Figura> listaDeFiguras) {
         this.nomeDoDesenho = nomeDoDesenho;
+        this.createdDated = createdDated;
+        this.updatedDate = updatedDate;
         this.listaDeFiguras = listaDeFiguras;
     }
 
@@ -41,5 +49,21 @@ public class OperacaoResponse implements Serializable {
 
     public void setOperacao(String operacao) {
         this.operacao = operacao;
+    }
+
+    public Date getCreatedDated() {
+        return createdDated;
+    }
+
+    public void setCreatedDated(Date createdDated) {
+        this.createdDated = createdDated;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }
