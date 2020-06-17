@@ -808,18 +808,12 @@ public class Janela extends JFrame {
                 }
             }
             try {
-//                Operacao operacao = new Operacao();
-//                operacao.setOperation("SAV");
                 ArrayList<Figura> listaDeFiguras = new ArrayList<>();
                 PrintWriter writer = new PrintWriter(new FileWriter(file));
                 for (Figura aux : figuras) {
                     listaDeFiguras.add(aux);
                     writer.println(aux.toString());
                 }
-//                operacao.setFiguraList(listaDeFiguras);
-//                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-//                objectOutputStream.writeObject(operacao);
-//                writer.print(savedContent);
                 writer.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -884,9 +878,6 @@ public class Janela extends JFrame {
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Paint files (*.paint)", "paint", "text");
             fChoose.setFileFilter(filter);
             File file = null;
-            Operacao operacao = new Operacao();
-            operacao.setOperation("CON");
-
 
             if (fChoose.showOpenDialog(Janela.this) == JFileChooser.APPROVE_OPTION) {
                 file = fChoose.getSelectedFile();
@@ -895,9 +886,7 @@ public class Janela extends JFrame {
                 pnlDesenho.repaint();
                 repaint();
             }
-            try     {
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                objectOutputStream.writeObject(operacao);
+            try {
                 BufferedReader in = new BufferedReader(new FileReader(file));
                 String line = in.readLine();
 
@@ -972,14 +961,15 @@ public class Janela extends JFrame {
                     }
                 }
 
-                TabelaSelecaoDesenhos tabelaDeDesenhos = new TabelaSelecaoDesenhos(responseList);
+                TabelaSelecaoDesenhos tabelaDeDesenhos = new TabelaSelecaoDesenhos( responseList);
 
                 int index = -1;
-                while(tabelaDeDesenhos.getSelectedPaint() != -1){
-                    index = tabelaDeDesenhos.getSelectedPaint();
-                    System.out.println("OUTPUT Selected: " + index);
-                }
+                index = tabelaDeDesenhos.getSelectedPaint();
 
+                if(index != -1){
+//                    pnlDesenho.repaint();
+//                    repaint();
+                }
                 responseList.get(index).getListaDeFiguras().stream().forEach(figura -> {
                     if (figura instanceof Quadrado) {
                         Quadrado figura1 = (Quadrado) figura;
@@ -1010,8 +1000,6 @@ public class Janela extends JFrame {
                         figura1.torneSeVisivel(pnlDesenho.getGraphics());
                     }
                 });
-
-
 
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
