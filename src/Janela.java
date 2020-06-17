@@ -966,11 +966,17 @@ public class Janela extends JFrame {
                 int index = -1;
                 index = tabelaDeDesenhos.getSelectedPaint();
 
-                if(index != -1){
-//                    pnlDesenho.repaint();
-//                    repaint();
+                if(responseList.get(index).getListaDeFiguras().size() == 0){
+                    System.out.println("RETURN");
+                    return;
+                }else if(figuras.size() != 0){
+                    System.out.println("CLEAR");
+                    figuras.clear();
+                    pnlDesenho.repaint();
+                    repaint();
                 }
                 responseList.get(index).getListaDeFiguras().stream().forEach(figura -> {
+                    figuras.add(figura);
                     if (figura instanceof Quadrado) {
                         Quadrado figura1 = (Quadrado) figura;
                         figura1.torneSeVisivel(pnlDesenho.getGraphics());

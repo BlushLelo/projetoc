@@ -31,12 +31,39 @@ public class TabelaSelecaoDesenhos extends JDialog {
         int row = 0;
         dados = new String[responses.size()][5];
 
+        StringBuilder conteudo = new StringBuilder();
+
         for(OperacaoResponse response : responses){
+            conteudo.delete(0,conteudo.length());
+            response.getListaDeFiguras().stream().forEach(figura -> {
+                if (figura instanceof Quadrado) {
+                    conteudo.append("Quadrado, ");
+                }
+                if(figura instanceof Linha){
+                    conteudo.append("Linha, ");
+                }
+                if(figura instanceof Circulo){
+                    conteudo.append("Circulo, ");
+                }
+                if(figura instanceof Elipse){
+                    conteudo.append("Elipse, ");
+                }
+                if(figura instanceof Poligono){
+                    conteudo.append("Poligno, ");
+                }
+                if(figura instanceof Retangulo){
+                    conteudo.append("Retangulo, ");
+                }
+                if(figura instanceof Texto){
+                    conteudo.append("Texto, ");
+                }
+            });
+
             dados[row][0] = response.getNomeDoDesenho();
-            dados[row][1] = "05-04-2020";
-            dados[row][2] = "05-04-2020";
-            dados[row][3] = response.getListaDeFiguras().toString();
-            dados[row][4] = "127.0.0.1";
+            dados[row][1] = response.getCreatedDated().toString();
+            dados[row][2] = response.getUpdatedDate().toString();
+            dados[row][3] = conteudo.toString();
+            dados[row][4] = response.getIpCliente();
             row++;
         }
 
