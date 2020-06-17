@@ -63,7 +63,7 @@ public class TabelaSelecaoDesenhos extends JDialog {
             dados[row][1] = response.getCreatedDated().toString();
             dados[row][2] = response.getUpdatedDate().toString();
             dados[row][3] = conteudo.toString();
-            dados[row][4] = response.getIpCliente();
+            dados[row][4] = response.getIp();
             row++;
         }
 

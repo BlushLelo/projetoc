@@ -633,6 +633,11 @@ public class Janela extends JFrame {
 
     protected class SairDoPrograma implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             System.exit(0);
         }
     }
