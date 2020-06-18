@@ -34,6 +34,7 @@ public class TabelaSelecaoDesenhos extends JDialog {
         StringBuilder conteudo = new StringBuilder();
 
         for(OperacaoResponse response : responses){
+
             conteudo.delete(0,conteudo.length());
             response.getListaDeFiguras().stream().forEach(figura -> {
                 if (figura instanceof Quadrado) {

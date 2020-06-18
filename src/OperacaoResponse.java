@@ -15,16 +15,37 @@ public class OperacaoResponse implements Serializable {
 
     private Date updatedDate;
 
+    private String ip;
+
+    private boolean error;
+
     private List<Figura> listaDeFiguras;
 
     public OperacaoResponse() {
     }
 
-    public OperacaoResponse(String nomeDoDesenho, Date createdDated, Date updatedDate, List<Figura> listaDeFiguras) {
+    public OperacaoResponse(String nomeDoDesenho, Date createdDated, Date updatedDate, List<Figura> listaDeFiguras, boolean error) {
         this.nomeDoDesenho = nomeDoDesenho;
         this.createdDated = createdDated;
         this.updatedDate = updatedDate;
         this.listaDeFiguras = listaDeFiguras;
+        this.error = error;
+    }
+
+    public OperacaoResponse(String nomeDoDesenho, Date createdDated, Date updatedDate, List<Figura> listaDeFiguras, String operacao, boolean error, String ip) {
+        this.nomeDoDesenho = nomeDoDesenho;
+        this.createdDated = createdDated;
+        this.updatedDate = updatedDate;
+        this.listaDeFiguras = listaDeFiguras;
+        this.operacao = operacao;
+        this.error = error;
+        this.ip = ip;
+    }
+
+    public OperacaoResponse(String operacao, Date createdDated, Date updatedDate) {
+        this.operacao = operacao;
+        this.createdDated = createdDated;
+        this.updatedDate = updatedDate;
     }
 
     public String getNomeDoDesenho() {
@@ -65,5 +86,21 @@ public class OperacaoResponse implements Serializable {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
     }
 }

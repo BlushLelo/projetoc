@@ -573,10 +573,8 @@ public class Janela extends JFrame {
                 aux = (ArrayList<Ponto>) vetorPontosPoligono.clone();
                 Poligono poligono = new Poligono(aux, corAtual, isPreenchido);
                 figuras.add(poligono);
-//                System.out.println("aux: " + Arrays.toString(vetorPontosPoligono.toArray()));
                 figuras.get(figuras.size() - 1).torneSeVisivel(pnlDesenho.getGraphics());
                 vetorPontosPoligono.clear();//limpa os pontos para o proximo desenho
-//                System.out.println("Size: "+figuras.size());
             }
         }
 
@@ -636,7 +634,7 @@ public class Janela extends JFrame {
             try {
                 socket.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                //System.out.println("disconnect");
             }
             System.exit(0);
         }
@@ -644,6 +642,11 @@ public class Janela extends JFrame {
 
     protected class FechamentoDeJanela extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                //System.out.println("disconnect");
+            }
             System.exit(0);
         }
     }
@@ -847,7 +850,6 @@ public class Janela extends JFrame {
                 Operacao operacao = new Operacao();
                 operacao.setOperation("SAV");
                 operacao.setNome(nomeDoDesenho);
-                operacao.setDataHora(this.getDateTime());
 
                 ArrayList<Figura> listaDeFiguras = new ArrayList<>();
                 for (Figura aux : figuras) {
@@ -856,10 +858,17 @@ public class Janela extends JFrame {
                 operacao.setFiguraList(listaDeFiguras);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 objectOutputStream.writeObject(operacao);
+
+                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                OperacaoResponse response = (OperacaoResponse) objectInputStream.readObject();
+
+                System.out.println("Operacao recebida: " + response.getOperacao());
             } catch (IOException ex) {
                 ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
-            }
+        }
         }
 
     protected class AbrirDesenho implements ActionListener {
@@ -959,9 +968,11 @@ public class Janela extends JFrame {
                     OperacaoResponse response = (OperacaoResponse) objectInputStream.readObject();
                     if(response.getOperacao().equals("DES")) {
                         responseList.add(response);
+                        System.out.println("Operacao recebida: " + response.getOperacao());
                     }
 
                     if(response.getOperacao().equals("FIC")) {
+                        System.out.println("Operacao recebida: " + response.getOperacao());
                         break;
                     }
                 }
@@ -972,10 +983,8 @@ public class Janela extends JFrame {
                 index = tabelaDeDesenhos.getSelectedPaint();
 
                 if(responseList.get(index).getListaDeFiguras().size() == 0){
-                    System.out.println("RETURN");
                     return;
                 }else if(figuras.size() != 0){
-                    System.out.println("CLEAR");
                     figuras.clear();
                     pnlDesenho.repaint();
                     repaint();
